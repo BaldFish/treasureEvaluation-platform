@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import myHome from '@/components/home/home'
 import myLogin from '@/components/login/login'
-import myDetails from '@/components/details/details'
+import myDetailsPage from '@/components/detailsPage/detailsPage'
 Vue.use(Router);
 
 export default new Router({
@@ -10,7 +10,7 @@ export default new Router({
   routes: [
     {
       path: "/",
-      redirect: "/home"
+      redirect: "/detailsPage"
     },
     {
       path:'/home',
@@ -23,9 +23,9 @@ export default new Router({
       component:myLogin
     },
     {
-      path:'/details',
-      name:'details',
-      component:myDetails
+      path:'/detailsPage',
+      name:'detailsPage',
+      component:myDetailsPage
     }
   ]
 })
