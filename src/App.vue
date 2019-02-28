@@ -59,7 +59,7 @@
       min-width 640px
       .main {
         flex: 1;
-        padding-bottom 98px
+        //padding-bottom 98px
       }
     }
   }
