@@ -46,12 +46,13 @@
     <div class="message_wrap">
       <h4 class="message"><span></span>鉴宝留言</h4>
       <!--<div class="login">
+        <p>您未 <span>登陆</span>，请先登录后查看留言；</p>
+        <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
       </div>-->
       <div class="underway">
         <ul>
-          <li class="name"><span>名称：</span><span>清乾隆早期铜胎掐丝珐琅花鸟纹尊清乾隆早期铜胎掐丝珐琅花鸟纹尊
-          清乾隆早期铜胎掐丝珐琅花鸟纹尊清乾隆早期铜胎掐丝珐琅花鸟纹尊</span></li>
-          <li class="price_year"><span>悬赏版通金额：</span><span>170000000.00</span><span>年代：</span><span>清乾隆</span></li>
+          <li class="name"><span>名称：</span><span>清乾隆早期铜胎掐丝珐琅花鸟纹尊</span></li>
+          <li class="price_year"><span>悬赏版通金额：</span><span>170000.00</span><span>年代：</span><span>清乾隆</span></li>
           <li class="time"><span>鉴宝结束时间：</span><span>2019-02-28 14:12:34</span></li>
           <li class="remark"><p>*注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p></li>
         </ul>
@@ -64,9 +65,125 @@
       <div class="list">
         <div class="line10"></div>
         <div class="list_content">
-        
+          <ul>
+            <li class="phone_identity">
+              <span>186****1680</span>
+              <span>古瓷器专家</span>
+            </li>
+            <li class="total">
+              <p>累计鉴定2097次</p>
+            </li>
+            <li class="time_launch">
+              <span>鉴宝时间：</span>
+              <span>2019-02-28 13:12</span>
+              <span>鉴定发起人：</span>
+              <span>139****2412</span>
+            </li>
+            <li class="verdict">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan
+                et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
+                ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
+            </li>
+          </ul>
         </div>
+        <div class="true"></div>
       </div>
+      <div class="list">
+        <div class="line10"></div>
+        <div class="list_content">
+          <ul>
+            <li class="phone_identity">
+              <span>186****1680</span>
+              <span>古瓷器专家</span>
+            </li>
+            <li class="total">
+              <p>累计鉴定2097次</p>
+            </li>
+            <li class="time_launch">
+              <span>鉴宝时间：</span>
+              <span>2019-02-28 13:12</span>
+              <span>鉴定发起人：</span>
+              <span>139****2412</span>
+            </li>
+            <li class="verdict">
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan
+                et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
+                ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
+            </li>
+          </ul>
+        </div>
+        <div class="false"></div>
+      </div>
+    </div>
+    <div class="dialog_contact">
+      <el-dialog
+        title="提示"
+        :visible.sync="contactDialogVisible"
+        width="76%"
+        center>
+        <h4>联系卖家</h4>
+        <p>18787627373</p>
+        <div class="btn">
+          <span>取消</span>
+          <a href="tel:18787627373"><span>呼叫</span></a>
+        </div>
+      </el-dialog>
+    </div>
+    <div class="dialog_launch">
+      <el-dialog
+        title="提示"
+        :visible.sync="launchDialogVisible"
+        width="76%"
+        center>
+        <h4>发起鉴宝</h4>
+        <div class="select_time">
+          <span class="til">鉴宝时间：</span>
+          <label v-for="(item,index) of selectTime" :class="{'active': index===dayIndex,}"@click="tabChangeDay(index)">
+            <a>{{item}}</a><input type="radio" :value="item" v-model="dayRadio">
+          </label>
+        </div>
+        <div class="money_wrap">
+          <span class="til">悬赏版通：</span>
+          <input type="text" v-model="money">
+        </div>
+        <div class="line8"></div>
+        <div class="send">
+          <span>请输入手机号186****1680短信验证码</span>
+          <span>发送</span>
+        </div>
+        <div class="currency clearfix">
+          <span>板通</span>
+          <span class="fr"></span>
+        </div>
+        <div class="code">
+          <input type="text" v-model="code" placeholder="请输入短信验证码">
+        </div>
+        <div class="btn">
+          <span>提交</span>
+        </div>
+      </el-dialog>
+    </div>
+    <div class="dialog_authenticate">
+      <el-dialog
+        title="提示"
+        :visible.sync="authenticateDialogVisible"
+        width="76%"
+        center>
+        <h4>鉴宝</h4>
+        <div class="select_result">
+          <span class="til">鉴宝时间：</span>
+          <label v-for="(item,index) of selectResult" :class="{'active': index===resultIndex,}" @click="tabChangeResult(index)">
+            <a>{{item}}</a><input type="radio" name="" :value="item" v-model="resultRadio">
+          </label>
+        </div>
+        <div class="comment">
+          <span class="til">评论：</span>
+          <textarea placeholder="(评价必须多于10个字)" v-model="comment"></textarea>
+        </div>
+        <div class="btn">
+          <span>提交</span>
+        </div>
+      </el-dialog>
     </div>
     <div class="footer_wrap clearfix">
       <span class="launch fl">发起鉴宝</span>
@@ -109,6 +226,18 @@
         result: {
           percentage: 80
         },
+        contactDialogVisible: false,
+        launchDialogVisible:false,
+        authenticateDialogVisible:false,
+        dayIndex:1,
+        resultIndex:0,
+        dayRadio:"14天",
+        resultRadio:"真",
+        selectTime:["7天","14天","1个月"],
+        selectResult:["真","假"],
+        money:"",
+        code:"",
+        comment:"",
       }
     },
     created() {
@@ -117,9 +246,17 @@
     },
     mounted() {
     },
-    watch: {},
+    watch: {
+    },
     computed: {},
-    methods: {},
+    methods: {
+      tabChangeDay(index){
+        this.dayIndex=index
+      },
+      tabChangeResult(index){
+        this.resultIndex=index
+      }
+    },
   }
 </script>
 
@@ -305,16 +442,38 @@
       }
       
       .login {
+        padding-bottom 30px
+        
+        p {
+          width: 480px;
+          margin 40px auto
+          font-size: 28px; /*px*/
+          line-height 36px
+          color: #999999;
+          text-align center
+          
+          span {
+            font-size: 36px;
+            color: #950101;
+          }
+        }
+        
+        p:last-child {
+          font-size: 24px; /*px*/
+          line-height 28px
+        }
+        
       }
       
       .underway {
         margin 30px auto
         width 100%
         height 100%
-        background url("../../common/images/left.png") no-repeat left top
-        background url("../../common/images/right.png") no-repeat right bottom
+        background url("../../common/images/left.png") no-repeat left top,
+        url("../../common/images/right.png") no-repeat right bottom
         padding 30px
         background-color #f6f6f6
+        
         li {
           font-size 0
           margin-top 24px
@@ -337,15 +496,15 @@
             font-weight bold
             color: #999999;
           }
-          
-          span:last-child {
-            width 460px
-            color: #333333;
-          }
         }
         
         .name {
           margin-top 0
+          
+          span:last-child {
+            width 500px
+            color: #333333;
+          }
         }
         
         .price_year {
@@ -355,7 +514,14 @@
           }
           
           span:nth-child(4) {
-            width 200px
+            width 155px
+            color: #333333;
+          }
+        }
+        
+        .time {
+          span:last-child {
+            width 400px
             color: #333333;
           }
         }
@@ -373,25 +539,121 @@
         }
       }
     }
-    .list_wrap{
-      .list{
-        .line10{
+    
+    .list_wrap {
+      .list {
+        position relative
+        
+        .line10 {
           width 740px
           height 9px
           margin 0 auto
           background-color #f6f6f6
         }
-        .list_content{
+        
+        .list_content {
           width 700px
           margin 0 auto
+          padding-top 20px
+          padding-bottom 20px
+          
+          ul {
+            li {
+              margin-top 20px
+              font-size: 0;
+              color: #999999;
+            }
+            
+            .phone_identity {
+              span {
+                font-size: 24px; /*px*/
+                display inline-block
+              }
+              
+              span:first-child {
+                font-size: 28px; /*px*/
+                font-weight bold
+                color: #333333;
+                margin-right 46px
+              }
+            }
+            
+            .total {
+              font-size: 24px; /*px*/
+            }
+            
+            .time_launch {
+              font-size: 24px; /*px*/
+              
+              span:nth-child(2) {
+                width 280px
+              }
+            }
+            
+            .verdict {
+              p {
+                font-size: 24px; /*px*/
+                min-height 200px
+              }
+            }
+          }
+        }
+        
+        .true {
+          position absolute
+          top 40px
+          right 25px
+          width 75px
+          height 75px
+          background url("../../common/images/true2.png") no-repeat center
+        }
+        
+        .false {
+          position absolute
+          top 40px
+          right 25px
+          width 75px
+          height 75px
+          background url("../../common/images/false2.png") no-repeat center
         }
       }
-      .list:first-child{
-        .line10{
+      
+      .list:first-child {
+        .line10 {
           display none
+        }
+        
+        .list_content {
+          padding-top 10px
+          padding-bottom 20px
+          
+          ul {
+            .phone_identity {
+              margin-top 0
+            }
+          }
+        }
+        
+        .true {
+          position absolute
+          top 10px
+          right 25px
+          width 75px
+          height 75px
+          background url("../../common/images/true2.png") no-repeat center
+        }
+        
+        .false {
+          position absolute
+          top 10px
+          right 25px
+          width 75px
+          height 75px
+          background url("../../common/images/false2.png") no-repeat center
         }
       }
     }
+    
     .footer_wrap {
       width 750px
       box-shadow: -3px -11px 46px 8px rgba(152, 152, 152, 0.2);
@@ -490,6 +752,317 @@
         .swiper-pagination-bullet-active {
           background-color: #ac0101;
           opacity: 1;
+        }
+      }
+    }
+  }
+  
+  .dialog_contact {
+    .el-dialog {
+      margin-top 35vh !important
+      
+      .el-dialog__header {
+        display none
+      }
+      
+      .el-dialog__body {
+        padding 0
+        height 334px
+        padding-top 15px
+        font-size 0
+        h4 {
+          width 466px
+          height 61px
+          margin 0 auto
+          text-align center
+          line-height 61px
+          font-size: 36px;/*px*/
+          color: #333333;
+          background-image: url(../../common/images/border1.png);
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
+          -moz-background-size: 100% 100%;
+  
+        }
+        
+        p {
+          margin 65px auto
+          text-align center
+          font-size: 48px;/*px*/
+          font-weight bold
+          color: #333333;
+        }
+        .btn{
+          box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
+          span {
+            width 285px
+            height 80px
+            line-height 80px
+            text-align center
+            display inline-block
+            font-size: 36px;/*px*/
+            color: #950101;
+          }
+          a{
+            span{
+              background-color #950101
+              color: #ffffff;
+            }
+          }
+        }
+      }
+    }
+  }
+  .dialog_launch {
+    .el-dialog {
+      margin-top 28vh !important
+    
+      .el-dialog__header {
+        display none
+      }
+    
+      .el-dialog__body {
+        padding 0
+        padding-top 15px
+        font-size 0
+        h4 {
+          width 466px
+          height 61px
+          margin 0 auto
+          text-align center
+          line-height 61px
+          font-size: 36px;/*px*/
+          color: #333333;
+          background-image: url(../../common/images/border1.png);
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
+          -moz-background-size: 100% 100%;
+        
+        }
+      
+        .select_time{
+          text-align center
+          margin-top 28px
+          margin-bottom 38px
+          .til{
+            display inline-block
+            height 44px
+            line-height 44px
+            font-size: 26px;/*px*/
+            color: #333333;
+            vertical-align top
+          }
+          label{
+            font-size 0
+            a{
+              display inline-block
+              background-color: #999999;
+              font-size: 26px;/*px*/
+              color: #ffffff;
+              width 88px
+              height 44px
+              line-height 44px
+              margin-right 10px
+            }
+          }
+          .active{
+            a{
+              background-color #950101
+            }
+          }
+        }
+        .money_wrap{
+          text-align center
+          margin-top 28px
+          margin-bottom 38px
+          font-size 0
+          .til{
+            display inline-block
+            height 44px
+            line-height 44px
+            font-size: 26px;/*px*/
+            color: #333333;
+            vertical-align top
+          }
+          input{
+            width 290px
+            height 44px
+            padding-left 20px
+            font-size: 26px;/*px*/
+            color: #999999;
+            vertical-align top
+            border: solid 3px #bfbfbf;
+            background-color #ffffff
+          }
+        }
+        .line8{
+          width 100%
+          height 8px
+          background-color #eeeeee;
+        }
+        .send{
+          margin-top 32px
+          font-size 0
+          text-align center
+          span:first-child{
+            display inline-block
+            font-size 22px;/*px*/
+          }
+          span:last-child{
+            display inline-block
+            font-size 24px;/*px*/
+            color: #ffffff;
+            width 100px
+            height 44px
+            line-height 44px
+            background-color #950101;
+            margin-left 12px
+          }
+        }
+        .currency{
+          height 32px
+          font-size 0
+          padding-left 40px
+          padding-right 40px
+          margin-top 40px
+          span{
+            display inline-block
+            font-size: 30px;/*px*/
+            color: #333333;
+            line-height 32px
+          }
+          span:last-child{
+            width 17px
+            height 32px
+            background-image: url(../../common/images/jiantou.png);
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            -moz-background-size: 100% 100%;
+          }
+        }
+        .code{
+          text-align center
+          input{
+            padding-left 25px
+            width 490px
+            height 50px
+            font-size 20px;/*px*/
+            margin-top 24px
+            margin-bottom 48px
+            color #999999
+            border: solid 1px #bfbfbf;
+          }
+        }
+        .btn{
+          box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
+          span {
+            width 570px
+            height 80px
+            line-height 80px
+            text-align center
+            display inline-block
+            font-size: 36px;/*px*/
+            background-color #950101;
+            color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+  .dialog_authenticate {
+    .el-dialog {
+      margin-top 28vh !important
+    
+      .el-dialog__header {
+        display none
+      }
+    
+      .el-dialog__body {
+        padding 0
+        padding-top 15px
+        font-size 0
+        h4 {
+          width 466px
+          height 61px
+          margin 0 auto
+          text-align center
+          line-height 61px
+          font-size: 36px;/*px*/
+          color: #333333;
+          background-image: url(../../common/images/border1.png);
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
+          -moz-background-size: 100% 100%;
+        
+        }
+      
+        .select_result{
+          text-align center
+          margin-top 28px
+          margin-bottom 38px
+          .til{
+            display inline-block
+            height 44px
+            line-height 44px
+            font-size: 26px;/*px*/
+            color: #333333;
+            vertical-align top
+          }
+          label{
+            font-size 0
+            a{
+              display inline-block
+              background-color: #999999;
+              font-size: 26px;/*px*/
+              color: #ffffff;
+              width 167px
+              height 59px
+              line-height 59px
+              margin-right 10px
+            }
+          }
+          .active{
+            a{
+              background-color #950101
+            }
+          }
+        }
+        .comment{
+          text-align center
+          margin-top 28px
+          margin-bottom 38px
+          font-size 0
+          .til{
+            display inline-block
+            height 44px
+            line-height 44px
+            font-size: 26px;/*px*/
+            color: #333333;
+            vertical-align top
+          }
+          textarea{
+            width: 384px;
+            height: 522px;
+            border: solid 3px #bfbfbf;
+            padding 15px
+            font-size: 26px;/*px*/
+            color: #999999;
+            vertical-align top
+            background-color #ffffff
+          }
+        }
+        .btn{
+          box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
+          span {
+            width 570px
+            height 80px
+            line-height 80px
+            text-align center
+            display inline-block
+            font-size: 36px;/*px*/
+            background-color #950101;
+            color: #ffffff;
+          }
         }
       }
     }
