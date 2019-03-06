@@ -85,8 +85,8 @@
                 ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
             </li>
           </ul>
+          <div class="list_true"><img src="@/common/images/true2.png" alt="真"></div>
         </div>
-        <div class="true"></div>
       </div>
       <div class="list">
         <div class="line10"></div>
@@ -111,8 +111,9 @@
                 ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
             </li>
           </ul>
+          <div class="list_false"><img src="@/common/images/false2.png" alt="真"></div>
         </div>
-        <div class="false"></div>
+        
       </div>
     </div>
     <div class="dialog_contact">
@@ -171,23 +172,26 @@
         center>
         <h4>鉴宝</h4>
         <div class="select_result">
-          <span class="til">鉴宝时间：</span>
+          <span class="til">鉴宝结果：</span>
           <label v-for="(item,index) of selectResult" :class="{'active': index===resultIndex,}" @click="tabChangeResult(index)">
             <a>{{item}}</a><input type="radio" name="" :value="item" v-model="resultRadio">
           </label>
         </div>
-        <div class="comment">
+        <div class="comment_wrap">
           <span class="til">评论：</span>
-          <textarea placeholder="(评价必须多于10个字)" v-model="comment"></textarea>
+          <div class="comment">
+            <textarea v-model="comment" minlength="10"  maxlength="500"></textarea>
+            <span class="tips"><span>{{comment.length}}</span>/500(评价必须多于10个字)</span>
+          </div>
         </div>
         <div class="btn">
           <span>提交</span>
         </div>
       </el-dialog>
     </div>
-    <div class="footer_wrap clearfix">
-      <span class="launch fl">发起鉴宝</span>
-      <span class="contact fr">联系卖家</span>
+    <div class="footer_wrap">
+      <span class="launch">发起鉴宝</span>
+      <span class="contact">联系卖家</span>
     </div>
   </div>
 </template>
@@ -228,7 +232,7 @@
         },
         contactDialogVisible: false,
         launchDialogVisible:false,
-        authenticateDialogVisible:false,
+        authenticateDialogVisible:true,
         dayIndex:1,
         resultIndex:0,
         dayRadio:"14天",
@@ -310,6 +314,13 @@
         .img_true {
           display inline-block
           vertical-align middle
+          width 51px
+          height 52px
+          img{
+            width 100%
+            height 100%
+          }
+          
         }
         
         .percentage_box {
@@ -341,12 +352,18 @@
         .img_false {
           display inline-block
           vertical-align middle
+          width 51px
+          height 52px
+          img{
+            width 100%
+            height 100%
+          }
         }
       }
     }
     
     .line20 {
-      width 750px
+      width 100%
       height 20px
       background-color #f6f6f6
     }
@@ -542,8 +559,6 @@
     
     .list_wrap {
       .list {
-        position relative
-        
         .line10 {
           width 740px
           height 9px
@@ -556,6 +571,7 @@
           margin 0 auto
           padding-top 20px
           padding-bottom 20px
+          position relative
           
           ul {
             li {
@@ -597,24 +613,29 @@
               }
             }
           }
-        }
-        
-        .true {
-          position absolute
-          top 40px
-          right 25px
-          width 75px
-          height 75px
-          background url("../../common/images/true2.png") no-repeat center
-        }
-        
-        .false {
-          position absolute
-          top 40px
-          right 25px
-          width 75px
-          height 75px
-          background url("../../common/images/false2.png") no-repeat center
+          .list_true {
+            position absolute
+            top 10px
+            right 25px
+            width 73px
+            height 75px
+            img{
+              width 100%
+              height 100%
+            }
+          }
+  
+          .list_false {
+            position absolute
+            top 20px
+            right 25px
+            width 73px
+            height 75px
+            img{
+              width 100%
+              height 100%
+            }
+          }
         }
       }
       
@@ -657,10 +678,10 @@
     .footer_wrap {
       width 750px
       box-shadow: -3px -11px 46px 8px rgba(152, 152, 152, 0.2);
-      
+      margin 0 auto
+      font-size 0
       span {
         display inline-block
-        font-size 0
         width 375px;
         text-align center
         line-height 101px;
@@ -1027,11 +1048,12 @@
             }
           }
         }
-        .comment{
+        .comment_wrap{
           text-align center
           margin-top 28px
           margin-bottom 38px
           font-size 0
+          
           .til{
             display inline-block
             height 44px
@@ -1040,15 +1062,31 @@
             color: #333333;
             vertical-align top
           }
-          textarea{
+          .comment{
+            display inline-block
             width: 384px;
             height: 522px;
             border: solid 3px #bfbfbf;
             padding 15px
-            font-size: 26px;/*px*/
-            color: #999999;
-            vertical-align top
             background-color #ffffff
+            position relative
+            textarea{
+              width 100%
+              min-height 452px
+              border none
+              font-size: 26px;/*px*/
+              color: #999999;
+              vertical-align top
+              background-color #ffffff
+            }
+            .tips{
+              display inline-block
+              position absolute
+              bottom 15px
+              right 15px
+              font-size: 22px;/*px*/
+              color: #999999;
+            }
           }
         }
         .btn{
