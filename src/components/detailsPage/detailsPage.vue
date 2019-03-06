@@ -232,7 +232,7 @@
         },
         contactDialogVisible: false,
         launchDialogVisible:false,
-        authenticateDialogVisible:true,
+        authenticateDialogVisible:false,
         dayIndex:1,
         resultIndex:0,
         dayRadio:"14天",
