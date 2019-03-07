@@ -14,7 +14,7 @@
         </ul>
       </div>
     </div>
-     <p class="x">加载更多...</p> 
+     <p class="x">加载更多...</p>
   </div>
 </template>
 
