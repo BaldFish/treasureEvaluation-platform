@@ -242,11 +242,13 @@
         money:"",
         code:"",
         comment:"",
+        token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjI5OTg5NTksInVzZXJfaWQiOiI1YTZiZTc0YTU1YWFmNTAwMDFhNWUyNTAiLCJkZXZpY2VfaWQiOiJbMjE4IDI0IDI4IDEyOCAxMTIgMTc0IDEwNSA1MyAxOTggMTg5IDExOCA1OSAyMCA2NyAxNjIgMjFdIn0.8rJXVnqIr7DDutYluGTdX6XfnxhWQNhPlUCg1jw5PHQ",
       }
     },
     created() {
     },
     beforeMount() {
+      this. getCommentList()
     },
     mounted() {
     },
@@ -254,9 +256,23 @@
     },
     computed: {},
     methods: {
+      //获取鉴宝评论列表
+      getCommentList(){
+        this.$axios({
+          method:'GET',
+          url:`${this.$baseURL}/v1/appraisal/evaluation?page=1&limit=10`,
+          'X-Access-Token':`${this.token}`
+        }).then(res=>{
+          console.log(res.data)
+        }).catch(error=>{
+          console.log(error)
+        })
+      },
+      //切换鉴宝天数
       tabChangeDay(index){
         this.dayIndex=index
       },
+      //切换鉴宝真假结果
       tabChangeResult(index){
         this.resultIndex=index
       }
