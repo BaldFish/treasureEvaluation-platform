@@ -1,119 +1,125 @@
 <template>
   <div class="detailsPage">
-    <div class="swiper_wrap">
-      <swiper :options="swiperOption" class="awesome_swiper" ref="swiperOption">
-        <swiper-slide v-for="(slide, index) in slides" :key="index" v-if="slides.length">
-          <img :src="slide.url" alt="">
-        </swiper-slide>
-        <div class="swiper-pagination" slot="pagination"></div>
-      </swiper>
-    </div>
-    <div class="result_wrap">
-      <div class="price_total clearfix">
-        <div class="price fl">¥<span>1778800.00</span></div>
-        <div class="total fr">累计鉴宝人数: 9999个</div>
-      </div>
-      <div class="title">
-        <h3>清宣统官造铜胎鎏银画珐珐琅琅奖牌</h3>
-      </div>
-      <div class="result">
-        <div class="img_true"><img src="@/common/images/true1.png" alt="真"></div>
-        <div class="percentage_box">
-          <span class="true">80%</span>
-          <span class="false">20%</span>
-          <my-progressBar :percentage="result.percentage"></my-progressBar>
-        </div>
-        <div class="img_false"><img src="@/common/images/false1.png" alt="假"></div>
-      </div>
-    </div>
-    <div class="line20"></div>
-    <div class="num">
-      <span>数量：</span>
-      <span>共2件</span>
-    </div>
-    <div class="line20"></div>
-    <div class="intro_wrap">
-      <h4 class="intro"><span></span>商品简介</h4>
-      <ul class="content">
-        <li class="name"><span>名称：</span><span>清乾隆早期铜胎掐丝珐琅花鸟纹尊</span></li>
-        <li class="price_year"><span>价格：</span><span>17788000</span><span>年代：</span><span>清乾隆</span></li>
-        <li class="size"><span>尺寸：</span><span>直径28cm、通高33cm、罐高20cm直径28cm、通高33cm、罐高20cm</span></li>
-        <li class="description"><span>描述：</span><span>清乾隆早期铜胎掐丝珐琅花鸟纹尊全品，罐外铜活为清
-			代法国所配，罐可转动。法国所配，罐可转动。</span></li>
-      </ul>
-    </div>
-    <div class="line20"></div>
-    <div class="message_wrap">
-      <h4 class="message"><span></span>鉴宝留言</h4>
-      <!--<div class="login">
-        <p>您未 <span>登陆</span>，请先登录后查看留言；</p>
-        <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
-      </div>-->
-      <div class="underway">
-        <ul>
-          <li class="name"><span>名称：</span><span>清乾隆早期铜胎掐丝珐琅花鸟纹尊</span></li>
-          <li class="price_year"><span>悬赏版通金额：</span><span>170000.00</span><span>年代：</span><span>清乾隆</span></li>
-          <li class="time"><span>鉴宝结束时间：</span><span>2019-02-28 14:12:34</span></li>
-          <li class="remark"><p>*注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p></li>
-        </ul>
-      </div>
-      <!--<div class="waiting">
-        <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
-      </div>-->
-    </div>
     <div class="list_wrap">
-      <div class="list">
-        <div class="line10"></div>
-        <div class="list_content">
-          <ul>
-            <li class="phone_identity">
-              <span>186****1680</span>
-              <span>古瓷器专家</span>
-            </li>
-            <li class="total">
-              <p>累计鉴定2097次</p>
-            </li>
-            <li class="time_launch">
-              <span>鉴宝时间：</span>
-              <span>2019-02-28 13:12</span>
-              <span>鉴定发起人：</span>
-              <span>139****2412</span>
-            </li>
-            <li class="verdict">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan
-                et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
-                ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
-            </li>
-          </ul>
-          <div class="list_true"><img src="@/common/images/true2.png" alt="真"></div>
+      <div class="bscroll" ref="bscroll">
+        <div class="bscroll_container">
+          <div class="drop_down" v-if="dropDown">刷新中...</div>
+          <div class="swiper_wrap">
+            <swiper :options="swiperOption" class="awesome_swiper" ref="swiperOption">
+              <swiper-slide v-for="(slide, index) in slides" :key="index" v-if="slides.length">
+                <img :src="slide.url" alt="">
+              </swiper-slide>
+              <div class="swiper-pagination" slot="pagination"></div>
+            </swiper>
+          </div>
+          <div class="result_wrap">
+            <div class="price_total clearfix">
+              <div class="price fl">¥<span>1778800.00</span></div>
+              <div class="total fr">累计鉴宝人数: 9999个</div>
+            </div>
+            <div class="title">
+              <h3>清宣统官造铜胎鎏银画珐珐琅琅奖牌</h3>
+            </div>
+            <div class="result">
+              <div class="img_true"><img src="@/common/images/true1.png" alt="真"></div>
+              <div class="percentage_box">
+                <span class="true">80%</span>
+                <span class="false">20%</span>
+                <my-progressBar :percentage="result.percentage"></my-progressBar>
+              </div>
+              <div class="img_false"><img src="@/common/images/false1.png" alt="假"></div>
+            </div>
+          </div>
+          <div class="line20"></div>
+          <div class="num">
+            <span>数量：</span>
+            <span>共2件</span>
+          </div>
+          <div class="line20"></div>
+          <div class="intro_wrap">
+            <h4 class="intro"><span></span>商品简介</h4>
+            <ul class="content">
+              <li class="name"><span>名称：</span><span>清乾隆早期铜胎掐丝珐琅花鸟纹尊</span></li>
+              <li class="price_year"><span>价格：</span><span>17788000</span><span>年代：</span><span>清乾隆</span></li>
+              <li class="size"><span>尺寸：</span><span>直径28cm、通高33cm、罐高20cm直径28cm、通高33cm、罐高20cm</span></li>
+              <li class="description"><span>描述：</span><span>清乾隆早期铜胎掐丝珐琅花鸟纹尊全品，罐外铜活为清
+			代法国所配，罐可转动。法国所配，罐可转动。</span></li>
+            </ul>
+          </div>
+          <div class="line20"></div>
+          <div class="message_wrap">
+            <h4 class="message"><span></span>鉴宝留言</h4>
+            <!--<div class="login">
+              <p>您未 <span>登陆</span>，请先登录后查看留言；</p>
+              <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
+            </div>-->
+            <div class="underway">
+              <ul>
+                <li class="name"><span>名称：</span><span>清乾隆早期铜胎掐丝珐琅花鸟纹尊</span></li>
+                <li class="price_year"><span>悬赏版通金额：</span><span>170000.00</span><span>年代：</span><span>清乾隆</span></li>
+                <li class="time"><span>鉴宝结束时间：</span><span>2019-02-28 14:12:34</span></li>
+                <li class="remark"><p>*注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p></li>
+              </ul>
+            </div>
+            <!--<div class="waiting">
+              <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
+            </div>-->
+          </div>
+          <div class="list">
+            <div class="line10"></div>
+            <div class="list_content">
+              <ul>
+                <li class="phone_identity">
+                  <span>186****1680</span>
+                  <span>古瓷器专家</span>
+                </li>
+                <li class="total">
+                  <p>累计鉴定2097次</p>
+                </li>
+                <li class="time_launch">
+                  <span>鉴宝时间：</span>
+                  <span>2019-02-28 13:12</span>
+                  <span>鉴定发起人：</span>
+                  <span>139****2412</span>
+                </li>
+                <li class="verdict">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan
+                    et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
+                    ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
+                </li>
+              </ul>
+              <div class="list_true"><img src="@/common/images/true2.png" alt="真"></div>
+            </div>
+          </div>
+          <div class="list">
+            <div class="line10"></div>
+            <div class="list_content">
+              <ul>
+                <li class="phone_identity">
+                  <span>186****1680</span>
+                  <span>古瓷器专家</span>
+                </li>
+                <li class="total">
+                  <p>累计鉴定2097次</p>
+                </li>
+                <li class="time_launch">
+                  <span>鉴宝时间：</span>
+                  <span>2019-02-28 13:12</span>
+                  <span>鉴定发起人：</span>
+                  <span>139****2412</span>
+                </li>
+                <li class="verdict">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan
+                    et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
+                    ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
+                </li>
+              </ul>
+              <div class="list_false"><img src="@/common/images/false2.png" alt="真"></div>
+            </div>
+  
+          </div>
+          <div class="swipe_up" v-if="swipeUp">加载中...</div>
         </div>
-      </div>
-      <div class="list">
-        <div class="line10"></div>
-        <div class="list_content">
-          <ul>
-            <li class="phone_identity">
-              <span>186****1680</span>
-              <span>古瓷器专家</span>
-            </li>
-            <li class="total">
-              <p>累计鉴定2097次</p>
-            </li>
-            <li class="time_launch">
-              <span>鉴宝时间：</span>
-              <span>2019-02-28 13:12</span>
-              <span>鉴定发起人：</span>
-              <span>139****2412</span>
-            </li>
-            <li class="verdict">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan
-                et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
-                ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
-            </li>
-          </ul>
-          <div class="list_false"><img src="@/common/images/false2.png" alt="真"></div>
-        </div>
-        
       </div>
     </div>
     <div class="dialog_contact">
@@ -197,6 +203,7 @@
 </template>
 
 <script>
+  import BScroll from 'better-scroll'
   import myProgressBar from "../progressBar/progressBar"
   
   export default {
@@ -233,6 +240,8 @@
         contactDialogVisible: false,
         launchDialogVisible:false,
         authenticateDialogVisible:false,
+        dropDown: false,
+        swipeUp: false,
         dayIndex:1,
         resultIndex:0,
         dayRadio:"14天",
@@ -251,6 +260,7 @@
       this. getCommentList()
     },
     mounted() {
+      this.scrollFn()
     },
     watch: {
     },
@@ -275,7 +285,81 @@
       //切换鉴宝真假结果
       tabChangeResult(index){
         this.resultIndex=index
-      }
+      },
+      scrollFn() {
+        this.$nextTick(() => {
+          if (!this.scroll) {
+            this.scroll = new BScroll(this.$refs.bscroll, {
+              click: false,
+              scrollY: true,
+              probeType: 3,
+              refreshDelay: 20,
+            });
+          } else {
+            this.scroll.refresh();
+          }
+          this.scroll.on('scroll', (pos) => {
+            //如果下拉超过50px 就显示刷新中...
+            if (pos.y > 100) {
+              this.dropDown = true
+            }
+            //上拉加载 总高度>下拉的高度+50 触发加载中...
+            if (this.scroll.maxScrollY > pos.y +50) {
+              this.swipeUp = true;
+            }
+          })
+      
+          //touchEnd（手指离开以后触发） 通过这个方法来监听下拉刷新
+          /*this.scroll.on('touchEnd', (pos) => {
+            // 下拉动作
+            if (pos.y > 100) {
+              this.scroll.maxScrollY=this.scroll.maxScrollY+50
+              this.dropDown = true
+              let that = this
+              window.setTimeout(function () {
+                that.dropDown = false;
+                that.scroll.refresh()
+                console.log("下拉刷新成功")
+              }, 2000)
+            }
+            //上拉加载 总高度>下拉的高度+50 触发加载中...
+            if (this.scroll.maxScrollY > pos.y + 50) {
+              this.scroll.maxScrollY=this.scroll.maxScrollY-50
+              this.swipeUp = true;
+              let that = this
+              window.setTimeout(function () {
+                that.swipeUp = false;
+                that.scroll.refresh()//使用refresh 方法 来更新scroll  解决无法滚动的问题
+                console.log("加载成功")
+              }, 2000)
+            }
+          })*/
+          // 是否派发滚动到底部事件，用于上拉加载
+          if (!this.pullup) {
+            this.scroll.on('scrollEnd', () => { // 滚动到底部
+              if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+                
+                this.swipeUp = true;
+                let that = this
+                window.setTimeout(function () {
+                  that.swipeUp = false;
+                  that.scroll.refresh()//使用refresh 方法 来更新scroll  解决无法滚动的问题
+                  console.log("加载成功")
+                }, 2000)
+              }
+            })
+          }
+          // 是否派发顶部下拉事件，用于下拉刷新
+         /* if (this.pulldown) {
+            this.scroll.on('touchend', (pos) => { // 下拉动作
+              if (pos.y > 50) {
+              
+              }
+            })
+          }*/
+  
+        });
+      },
     },
   }
 </script>
@@ -283,412 +367,404 @@
 <style scoped lang="stylus">
   .detailsPage {
     width 750px
+    height 100vh
+    display flex
+    flex-direction: column;
     margin 0 auto
-    
-    .result_wrap {
-      padding 0 25px 40px
-      
-      .price_total {
-        font-size 0
-        padding-top 30px
-        
-        .price {
-          color: #ac0101;
-          font-size 24px; /*px*/
-          font-weight bold
-          
-          span {
-            display inline-block
-            font-size 36px; /*px*/
-            line-height 36px; /*px*/
-            font-weight bold
-          }
-        }
-        
-        .total {
-          color: #999999;
-          font-size 24px; /*px*/
-          line-height 36px; /*px*/
-        }
-      }
-      
-      .title {
-        padding-top 44px
-        
-        h3 {
-          font-size: 36px; /*px*/
-          color: #333333;
-          font-weight bold
-        }
-      }
-      
-      .result {
-        font-size 0
-        margin-top 48px
-        text-align center
-        
-        .img_true {
-          display inline-block
-          vertical-align middle
-          width 51px
-          height 52px
-          img{
-            width 100%
-            height 100%
-          }
-          
-        }
-        
-        .percentage_box {
-          display inline-block
-          font-size 20px; /*px*/
-          vertical-align middle
-          position relative
-          margin 0 20px;
-          
-          .true {
-            position absolute
-            left 5px
-            bottom 26px
-            font-size: 26px; /*px*/
-            color: #333333;
-            font-weight bold
-          }
-          
-          .false {
-            position absolute
-            right 5px
-            bottom 26px
-            font-size: 26px; /*px*/
-            color: #333333;
-            font-weight bold
-          }
-        }
-        
-        .img_false {
-          display inline-block
-          vertical-align middle
-          width 51px
-          height 52px
-          img{
-            width 100%
-            height 100%
-          }
-        }
-      }
-    }
-    
-    .line20 {
-      width 100%
-      height 20px
-      background-color #f6f6f6
-    }
-    
-    .num {
-      width 750px
-      height 128px
-      padding 0 25px
-      
-      span {
-        font-size: 34px; /*px*/
-        line-height 128px
-      }
-      
-      span:first-child {
-        color: #333333;
-        font-weight bold
-      }
-      
-      span:last-child {
-        color: #999999;
-      }
-    }
-    
-    .intro_wrap {
-      padding 45px 25px 50px
-      
-      .intro {
-        font-size: 32px; /*px*/
-        color: #333333;
-        font-weight bold
-        
-        span {
-          display inline-block
-          width 6px
-          height 32px
-          background-color: #950101;
-          vertical-align top
-          margin-right 16px
-        }
-      }
-      
-      .content {
-        li {
-          margin-top 30px
-          font-size 0
-          
-          span {
-            font-size 24px; /*px*/
-            display inline-block
-            vertical-align top
-            line-height 30px
-            font-weight bold
-            color: #999999;
-          }
-          
-          span:last-child {
-            width 590px
-            color: #333333;
-          }
-        }
-        
-        .price_year {
-          span:nth-child(2) {
-            width 250px
-            color: #333333;
-          }
-          
-          span:nth-child(4) {
-            width 250px
-            color: #333333;
-          }
-        }
-      }
-    }
-    
-    .message_wrap {
-      padding 45px 25px 0
-      
-      .message {
-        font-size: 32px; /*px*/
-        color: #333333;
-        font-weight bold
-        
-        span {
-          display inline-block
-          width 6px
-          height 32px
-          background-color: #950101;
-          vertical-align top
-          margin-right 16px
-        }
-      }
-      
-      .login {
-        padding-bottom 30px
-        
-        p {
-          width: 480px;
-          margin 40px auto
-          font-size: 28px; /*px*/
-          line-height 36px
-          color: #999999;
-          text-align center
-          
-          span {
-            font-size: 36px;
-            color: #950101;
-          }
-        }
-        
-        p:last-child {
-          font-size: 24px; /*px*/
-          line-height 28px
-        }
-        
-      }
-      
-      .underway {
-        margin 30px auto
-        width 100%
-        height 100%
-        background url("../../common/images/left.png") no-repeat left top,
-        url("../../common/images/right.png") no-repeat right bottom
-        padding 30px
-        background-color #f6f6f6
-        
-        li {
-          font-size 0
-          margin-top 24px
-          
-          p {
-            font-size: 24px; /*px*/
-            line-height 30px
-            color: #999999;
-            width 640px
-            margin 0 auto
-            text-align center
-            font-weight bold
-          }
-          
-          span {
-            display inline-block
-            font-size 24px; /*px*/
-            vertical-align top
-            line-height 30px
-            font-weight bold
-            color: #999999;
-          }
-        }
-        
-        .name {
-          margin-top 0
-          
-          span:last-child {
-            width 500px
-            color: #333333;
-          }
-        }
-        
-        .price_year {
-          span:nth-child(2) {
-            width 200px
-            color: #333333;
-          }
-          
-          span:nth-child(4) {
-            width 155px
-            color: #333333;
-          }
-        }
-        
-        .time {
-          span:last-child {
-            width 400px
-            color: #333333;
-          }
-        }
-      }
-      
-      .waiting {
-        padding 60px 0
-        
-        p {
-          width: 310px;
-          margin 0 auto
-          font-size: 24px; /*px*/
-          line-height 28px
-          color: #999999;
-        }
-      }
-    }
-    
+    padding-bottom 101px
     .list_wrap {
-      .list {
-        .line10 {
-          width 740px
-          height 9px
-          margin 0 auto
-          background-color #f6f6f6
-        }
-        
-        .list_content {
-          width 700px
-          margin 0 auto
-          padding-top 20px
-          padding-bottom 20px
-          position relative
-          
-          ul {
-            li {
-              margin-top 20px
-              font-size: 0;
-              color: #999999;
-            }
-            
-            .phone_identity {
-              span {
-                font-size: 24px; /*px*/
-                display inline-block
-              }
-              
-              span:first-child {
-                font-size: 28px; /*px*/
-                font-weight bold
-                color: #333333;
-                margin-right 46px
-              }
-            }
-            
-            .total {
-              font-size: 24px; /*px*/
-            }
-            
-            .time_launch {
-              font-size: 24px; /*px*/
-              
-              span:nth-child(2) {
-                width 280px
-              }
-            }
-            
-            .verdict {
-              p {
-                font-size: 24px; /*px*/
-                min-height 200px
-              }
-            }
+      display: flex;
+      flex: 1;
+      overflow hidden
+      .bscroll {
+        width: 100%;
+        //max-height: 100%
+        .bscroll_container {
+          .drop_down {
+            text-align center
+            font-size: 30px; /*px*/
+            line-height: 100px;
+            color: #333333;
           }
-          .list_true {
-            position absolute
-            top 10px
-            right 25px
-            width 73px
-            height 75px
-            img{
-              width 100%
-              height 100%
+      
+          .result_wrap {
+            padding 0 25px 40px
+    
+            .price_total {
+              font-size 0
+              padding-top 30px
+      
+              .price {
+                color: #ac0101;
+                font-size 24px; /*px*/
+                font-weight bold
+        
+                span {
+                  display inline-block
+                  font-size 36px; /*px*/
+                  line-height 36px; /*px*/
+                  font-weight bold
+                }
+              }
+      
+              .total {
+                color: #999999;
+                font-size 24px; /*px*/
+                line-height 36px; /*px*/
+              }
+            }
+    
+            .title {
+              padding-top 44px
+      
+              h3 {
+                font-size: 36px; /*px*/
+                color: #333333;
+                font-weight bold
+              }
+            }
+    
+            .result {
+              font-size 0
+              margin-top 48px
+              text-align center
+      
+              .img_true {
+                display inline-block
+                vertical-align middle
+                width 51px
+                height 52px
+                img{
+                  width 100%
+                  height 100%
+                }
+        
+              }
+      
+              .percentage_box {
+                display inline-block
+                font-size 20px; /*px*/
+                vertical-align middle
+                position relative
+                margin 0 20px;
+        
+                .true {
+                  position absolute
+                  left 5px
+                  bottom 26px
+                  font-size: 26px; /*px*/
+                  color: #333333;
+                  font-weight bold
+                }
+        
+                .false {
+                  position absolute
+                  right 5px
+                  bottom 26px
+                  font-size: 26px; /*px*/
+                  color: #333333;
+                  font-weight bold
+                }
+              }
+      
+              .img_false {
+                display inline-block
+                vertical-align middle
+                width 51px
+                height 52px
+                img{
+                  width 100%
+                  height 100%
+                }
+              }
             }
           }
   
-          .list_false {
-            position absolute
-            top 20px
-            right 25px
-            width 73px
-            height 75px
-            img{
+          .line20 {
+            width 100%
+            height 20px
+            background-color #f6f6f6
+          }
+  
+          .num {
+            width 750px
+            height 128px
+            padding 0 25px
+    
+            span {
+              font-size: 34px; /*px*/
+              line-height 128px
+            }
+    
+            span:first-child {
+              color: #333333;
+              font-weight bold
+            }
+    
+            span:last-child {
+              color: #999999;
+            }
+          }
+  
+          .intro_wrap {
+            padding 45px 25px 50px
+    
+            .intro {
+              font-size: 32px; /*px*/
+              color: #333333;
+              font-weight bold
+      
+              span {
+                display inline-block
+                width 6px
+                height 32px
+                background-color: #950101;
+                vertical-align top
+                margin-right 16px
+              }
+            }
+    
+            .content {
+              li {
+                margin-top 30px
+                font-size 0
+        
+                span {
+                  font-size 24px; /*px*/
+                  display inline-block
+                  vertical-align top
+                  line-height 30px
+                  font-weight bold
+                  color: #999999;
+                }
+        
+                span:last-child {
+                  width 590px
+                  color: #333333;
+                }
+              }
+      
+              .price_year {
+                span:nth-child(2) {
+                  width 250px
+                  color: #333333;
+                }
+        
+                span:nth-child(4) {
+                  width 250px
+                  color: #333333;
+                }
+              }
+            }
+          }
+  
+          .message_wrap {
+            padding 45px 25px 0
+    
+            .message {
+              font-size: 32px; /*px*/
+              color: #333333;
+              font-weight bold
+      
+              span {
+                display inline-block
+                width 6px
+                height 32px
+                background-color: #950101;
+                vertical-align top
+                margin-right 16px
+              }
+            }
+    
+            .login {
+              padding-bottom 30px
+      
+              p {
+                width: 480px;
+                margin 40px auto
+                font-size: 28px; /*px*/
+                line-height 36px
+                color: #999999;
+                text-align center
+        
+                span {
+                  font-size: 36px;
+                  color: #950101;
+                }
+              }
+      
+              p:last-child {
+                font-size: 24px; /*px*/
+                line-height 28px
+              }
+      
+            }
+    
+            .underway {
+              margin 30px auto
               width 100%
               height 100%
+              background url("../../common/images/left.png") no-repeat left top,
+              url("../../common/images/right.png") no-repeat right bottom
+              padding 30px
+              background-color #f6f6f6
+      
+              li {
+                font-size 0
+                margin-top 24px
+        
+                p {
+                  font-size: 24px; /*px*/
+                  line-height 30px
+                  color: #999999;
+                  width 640px
+                  margin 0 auto
+                  text-align center
+                  font-weight bold
+                }
+        
+                span {
+                  display inline-block
+                  font-size 24px; /*px*/
+                  vertical-align top
+                  line-height 30px
+                  font-weight bold
+                  color: #999999;
+                }
+              }
+      
+              .name {
+                margin-top 0
+        
+                span:last-child {
+                  width 500px
+                  color: #333333;
+                }
+              }
+      
+              .price_year {
+                span:nth-child(2) {
+                  width 200px
+                  color: #333333;
+                }
+        
+                span:nth-child(4) {
+                  width 155px
+                  color: #333333;
+                }
+              }
+      
+              .time {
+                span:last-child {
+                  width 400px
+                  color: #333333;
+                }
+              }
+            }
+    
+            .waiting {
+              padding 60px 0
+      
+              p {
+                width: 310px;
+                margin 0 auto
+                font-size: 24px; /*px*/
+                line-height 28px
+                color: #999999;
+              }
             }
           }
+  
+          .list {
+            .line10 {
+              width 740px
+              height 9px
+              margin 0 auto
+              background-color #f6f6f6
+            }
+    
+            .list_content {
+              width 700px
+              margin 0 auto
+              padding-top 20px
+              padding-bottom 20px
+              position relative
+      
+              ul {
+                li {
+                  margin-top 20px
+                  font-size: 0;
+                  color: #999999;
+                }
+        
+                .phone_identity {
+                  span {
+                    font-size: 24px; /*px*/
+                    display inline-block
+                  }
+          
+                  span:first-child {
+                    font-size: 28px; /*px*/
+                    font-weight bold
+                    color: #333333;
+                    margin-right 46px
+                  }
+                }
+        
+                .total {
+                  font-size: 24px; /*px*/
+                }
+        
+                .time_launch {
+                  font-size: 24px; /*px*/
+          
+                  span:nth-child(2) {
+                    width 280px
+                  }
+                }
+        
+                .verdict {
+                  p {
+                    font-size: 24px; /*px*/
+                    min-height 200px
+                  }
+                }
+              }
+              .list_true {
+                position absolute
+                top 20px
+                right 25px
+                width 73px
+                height 75px
+                img{
+                  width 100%
+                  height 100%
+                }
+              }
+      
+              .list_false {
+                position absolute
+                top 20px
+                right 25px
+                width 73px
+                height 75px
+                img{
+                  width 100%
+                  height 100%
+                }
+              }
+            }
+          }
+          .swipe_up {
+            text-align center
+            font-size: 30px; /*px*/
+            line-height: 50px;
+            color: #333333;
+          }
         }
+    
       }
       
-      .list:first-child {
-        .line10 {
-          display none
-        }
-        
-        .list_content {
-          padding-top 10px
-          padding-bottom 20px
-          
-          ul {
-            .phone_identity {
-              margin-top 0
-            }
-          }
-        }
-        
-        .true {
-          position absolute
-          top 10px
-          right 25px
-          width 75px
-          height 75px
-          background url("../../common/images/true2.png") no-repeat center
-        }
-        
-        .false {
-          position absolute
-          top 10px
-          right 25px
-          width 75px
-          height 75px
-          background url("../../common/images/false2.png") no-repeat center
-        }
-      }
     }
     
     .footer_wrap {
@@ -696,6 +772,9 @@
       box-shadow: -3px -11px 46px 8px rgba(152, 152, 152, 0.2);
       margin 0 auto
       font-size 0
+      position fixed
+      bottom 0
+      background-color #ffffff
       span {
         display inline-block
         width 375px;
@@ -722,37 +801,6 @@
     height 750px
     margin 0 auto
     box-shadow: inset -2px -8px 19px 0px rgba(8, 0, 2, 0.03);
-    /*.swiper {
-      .wc-slide {
-        width 750px
-        height 750px
-        img {
-          max-width 750px
-          max-height 750px
-          position: relative;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-      }
-      
-      .wc-pagination {
-        bottom 16px
-        .wc-dot {
-          height: 14px;
-          width: 14px;
-          background-color: #950101;
-          opacity: 0.3;
-          margin: 0 9px;
-          border-radius: 50%;
-        }
-        
-        .wc-dot-active {
-          opacity: 1;
-          background: #5226f3;
-        }
-      }
-    }*/
-    
     .awesome_swiper {
       .swiper-wrapper {
         width 750px

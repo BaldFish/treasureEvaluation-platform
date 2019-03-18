@@ -1,183 +1,199 @@
 <template>
-  <div class="yo-scroll"
-       :class="{'down':(state===0),'up':(state==1),refresh:(state===2),touch:touching}"
-       @touchstart="touchStart($event)"
-       @touchmove="touchMove($event)"
-       @touchend="touchEnd($event)"
-       @scroll="(onInfinite || infiniteLoading) ? onScroll($event) : undefined">
-    <section class="inner" :style="{ transform: 'translate3d(0, ' + top + 'px, 0)' }">
-      <header class="pull-refresh">
-        <slot name="pull-refresh">
-          <span class="down-tip">下拉更新</span>
-          <span class="up-tip">松开更新</span>
-          <span class="refresh-tip">更新中</span>
-        </slot>
-      </header>
-      <slot></slot>
-      <footer class="load-more">
-        <slot name="load-more">
-          <span>加载中……</span>
-        </slot>
-      </footer>
-    </section>
+  <div class="wrapper" ref="wrapper">
+    <ul class="content">
+      <div class="newxin" v-if="down"> {{pulldownTip.text}}</div>
+      <li>喵喵喵</li>
+      <li>喵喵喵</li>
+      <li>喵喵喵</li>
+      <li>喵喵喵</li>
+      <li>喵喵喵</li>
+      <li>喵喵喵</li>
+      <li>喵喵喵</li>
+
+      <div class="newxin" v-if="up"> {{ pulldownTip.textup }}</div>
+    </ul>
   </div>
 </template>
-
 <script>
+  import BScroll from 'better-scroll';
   export default {
-    props: {
-      offset: {
-        type: Number,
-        default: 40
-      },
-      enableInfinite: {
-        type: Boolean,
-        default: true
-      },
-      enableRefresh: {
-        type: Boolean,
-        default: true
-      },
-      onRefresh: {
-        type: Function,
-        default: undefined,
-        required: false
-      },
-      onInfinite: {
-        type: Function,
-        default: undefined,
-        require: false
-      }
-    },
     data() {
       return {
-        top: 0,
-        state: 0,
-        startY: 0,
-        touching: false,
-        infiniteLoading: false
+        loadingConnecting: false,
+        down: false,
+        up: false,
+        pulldownTip: {
+          text: '下拉刷新', // 松开立即刷新
+          textup: '上拉加载更多', // 松开立即刷新
+          rotate: '' // icon-rotate
+        }
+      };
+    },
+    mounted() {
+      setTimeout(() => {
+        this.BS();
+      }, 20);
+    },
+    watch: {
+      // 监听数据的变化，延时refreshDelay时间后调用refresh方法重新计算，保证滚动效果正常
+      data() {
+        setTimeout(() => {
+          this.BS();
+        }, this.refreshDelay);
       }
     },
     methods: {
-      touchStart(e) {
-        this.startY = e.targetTouches[0].pageY
-        this.startScroll = this.$el.scrollTop || 0
-        this.touching = true
-      },
-      touchMove(e) {
-        if (!this.enableRefresh || this.$el.scrollTop > 0 || !this.touching) {
-          return
+      BS() {
+        if(!this.$refs.wrapper) {
+          return;
         }
-        let diff = e.targetTouches[0].pageY - this.startY - this.startScroll
-        if (diff > 0) e.preventDefault()
-        this.top = Math.pow(diff, 0.8) + (this.state === 2 ? this.offset : 0)
-        
-        if (this.state === 2) { // in refreshing
-          return
-        }
-        if (this.top >= this.offset) {
-          this.state = 1
-        } else {
-          this.state = 0
-        }
+        // better-scroll的初始化
+        this.scroll = new BScroll(this.$refs.wrapper, {
+          probeType: this.probeType,
+          click: this.click,
+          scrollX: this.scrollX
+        });
+        this.scroll.on('scroll', pos => {
+          console.log(pos.y);
+          //如果下拉超过50px 就显示下拉刷新的文字
+          if(pos.y > 50) {
+            this.pulldownTip.text = "放手刷新"
+            this.down = true
+          } else {
+            this.down = false
+          }
+          if (this.scroll.maxScrollY > pos.y + 50) {
+            this.up = true;
+          }/*else{
+            this.up = false;
+          }*/
+        });
+        //touchEnd 通过这个方法来监听下拉刷新
+        this.scroll.on('touchEnd', pos => {
+          // 下拉动作
+          if(pos.y > 50) {
+            let that=this
+            window.setTimeout(function () {
+              that.down = false;
+              that.scroll.refresh()
+              console.log("刷新成功")
+            },5000)
+          }
+          if(this.scroll.maxScrollY > pos.y + 50) {
+            let that=this
+            window.setTimeout(function () {
+              that.up = false;
+              that.scroll.refresh()
+              console.log("加载成功")
+            },5000)
+            //使用refresh 方法 来更新scroll  解决无法滚动的问题
+          }
+        });
+      }
+    },
+    props: {
+      /**
+       * 1 滚动的时候会派发scroll事件，会截流。
+       * 2 滚动的时候实时派发scroll事件，不会截流。
+       * 3 除了实时派发scroll事件，在swipe的情况下仍然能实时派发scroll事件
+       */
+      probeType: {
+        type: Number,
+        default: 3
       },
-      touchEnd(e) {
-        if (!this.enableRefresh) return
-        this.touching = false
-        if (this.state === 2) { // in refreshing
-          this.state = 2
-          this.top = this.offset
-          return
-        }
-        if (this.top >= this.offset) { // do refresh
-          this.refresh()
-        } else { // cancel refresh
-          this.state = 0
-          this.top = 0
-        }
+      /**
+       * 点击列表是否派发click事件
+       */
+      click: {
+        type: Boolean,
+        default: true
       },
-      refresh() {
-        this.state = 2
-        this.top = this.offset
-        this.onRefresh(this.refreshDone)
+      /**
+       * 是否开启横向滚动
+       */
+      scrollX: {
+        type: Boolean,
+        default: false
       },
-      refreshDone() {
-        this.state = 0
-        this.top = 0
+      /**
+       * 是否派发滚动事件
+       */
+      listenScroll: {
+        type: Boolean,
+        default: false
       },
-      
-      infinite() {
-        this.infiniteLoading = true
-        this.onInfinite(this.infiniteDone)
+      /**
+       * 列表的数据
+       */
+      data: {
+        type: Array,
+        default: null
       },
-      
-      infiniteDone() {
-        this.infiniteLoading = false
+      /**
+       * 是否派发滚动到底部的事件，用于上拉加载
+       */
+      pullup: {
+        type: Boolean,
+        default: true
       },
-      
-      onScroll(e) {
-        if (!this.enableInfinite || this.infiniteLoading) {
-          return
-        }
-        let outerHeight = this.$el.clientHeight
-        let innerHeight = this.$el.querySelector('.inner').clientHeight
-        let scrollTop = this.$el.scrollTop
-        let ptrHeight = this.onRefresh ? this.$el.querySelector('.pull-refresh').clientHeight : 0
-        let infiniteHeight = this.$el.querySelector('.load-more').clientHeight
-        let bottom = innerHeight - outerHeight - scrollTop - ptrHeight
-        if (bottom < infiniteHeight) this.infinite()
+      /**
+       * 是否派发顶部下拉的事件，用于下拉刷新
+       */
+      pulldown: {
+        type: Boolean,
+        default: true
+      },
+      /**
+       * 是否派发列表滚动开始的事件
+       */
+      beforeScroll: {
+        type: Boolean,
+        default: false
+      },
+      /**
+       * 当数据更新后，刷新scroll的延时。
+       */
+      refreshDelay: {
+        type: Number,
+        default: 20
       }
     }
   }
+  
+  ;
 </script>
 <style>
-  .yo-scroll {
-    position: absolute;
-    top: 2.5rem;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-    background-color: #ddd
+  * {
+    margin: 0px;
+    padding: 0px;
   }
-  .yo-scroll .inner {
-    position: absolute;
-    top: -2rem;
+  
+  .wrapper {
     width: 100%;
-    transition-duration: 300ms;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
   }
-  .yo-scroll .pull-refresh {
-    position: relative;
-    left: 0;
-    top: 0;
+  
+  .wrapper .content {
     width: 100%;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
-  .yo-scroll.touch .inner {
-    transition-duration: 0ms;
+  
+  .wrapper .content li {
+    background-color: #ffffff;
+    width: 100%;
+    height: 66px;
+    text-align: center;
+    line-height: 66px;
+    border-bottom: solid 1px #f0f0f0;
   }
-  .yo-scroll.down .down-tip {
-    display: block;
-  }
-  .yo-scroll.up .up-tip {
-    display: block;
-  }
-  .yo-scroll.refresh .refresh-tip {
-    display: block;
-  }
-  .yo-scroll .down-tip,
-  .yo-scroll .refresh-tip,
-  .yo-scroll .up-tip {
-    display: none;
-  }
-  .yo-scroll .load-more {
-    height: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* 刷新 */
+  
+  .newxin {
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    background: red;
   }
 </style>

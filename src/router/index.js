@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import myHome from '@/components/home/home'
 import myLogin from '@/components/login/login'
 import myDetailsPage from '@/components/detailsPage/detailsPage'
-import myBetterScroll from '@/components/myBetterScroll/myBetterScroll'
+import myBetterScroll from '@/components/betterScroll/betterScroll'
+import myYoScroll from '@/components/yoScroll/yoScroll'
 Vue.use(Router);
 
 export default new Router({
@@ -29,9 +30,14 @@ export default new Router({
       component:myDetailsPage
     },
     {
-      path:'/myBetterScroll',
-      name:'myBetterScroll',
+      path:'/betterScroll',
+      name:'betterScroll',
       component:myBetterScroll
+    },
+    {
+      path:'/yoScroll',
+      name:'yoScroll',
+      component:myYoScroll
     }
   ]
 })
