@@ -83,7 +83,8 @@
                   <span>139****2412</span>
                 </li>
                 <li class="verdict">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus
+                    accumsan
                     et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
                     ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
                 </li>
@@ -109,16 +110,17 @@
                   <span>139****2412</span>
                 </li>
                 <li class="verdict">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus
+                    accumsan
                     et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
                     ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
                 </li>
               </ul>
               <div class="list_false"><img src="@/common/images/false2.png" alt="真"></div>
             </div>
-  
+          
           </div>
-          <div class="swipe_up" v-if="swipeUp">加载中...</div>
+          <div class="pull_up" v-if="pullUp">加载中...</div>
         </div>
       </div>
     </div>
@@ -145,7 +147,7 @@
         <h4>发起鉴宝</h4>
         <div class="select_time">
           <span class="til">鉴宝时间：</span>
-          <label v-for="(item,index) of selectTime" :class="{'active': index===dayIndex,}"@click="tabChangeDay(index)">
+          <label v-for="(item,index) of selectTime" :class="{'active': index===dayIndex,}" @click="tabChangeDay(index)">
             <a>{{item}}</a><input type="radio" :value="item" v-model="dayRadio">
           </label>
         </div>
@@ -186,7 +188,7 @@
         <div class="comment_wrap">
           <span class="til">评论：</span>
           <div class="comment">
-            <textarea v-model="comment" minlength="10"  maxlength="500"></textarea>
+            <textarea v-model="comment" minlength="10" maxlength="500"></textarea>
             <span class="tips"><span>{{comment.length}}</span>/500(评价必须多于10个字)</span>
           </div>
         </div>
@@ -238,53 +240,51 @@
           percentage: 80
         },
         contactDialogVisible: false,
-        launchDialogVisible:false,
-        authenticateDialogVisible:false,
+        launchDialogVisible: false,
+        authenticateDialogVisible: false,
         dropDown: false,
-        swipeUp: false,
-        dayIndex:1,
-        resultIndex:0,
-        dayRadio:"14天",
-        resultRadio:"真",
-        selectTime:["7天","14天","1个月"],
-        selectResult:["真","假"],
-        money:"",
-        code:"",
-        comment:"",
-        token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjI5OTg5NTksInVzZXJfaWQiOiI1YTZiZTc0YTU1YWFmNTAwMDFhNWUyNTAiLCJkZXZpY2VfaWQiOiJbMjE4IDI0IDI4IDEyOCAxMTIgMTc0IDEwNSA1MyAxOTggMTg5IDExOCA1OSAyMCA2NyAxNjIgMjFdIn0.8rJXVnqIr7DDutYluGTdX6XfnxhWQNhPlUCg1jw5PHQ",
+        pullUp: false,
+        dayIndex: 1,
+        resultIndex: 0,
+        dayRadio: "14天",
+        resultRadio: "真",
+        selectTime: ["7天", "14天", "1个月"],
+        selectResult: ["真", "假"],
+        money: "",
+        code: "",
+        comment: "",
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjI5OTg5NTksInVzZXJfaWQiOiI1YTZiZTc0YTU1YWFmNTAwMDFhNWUyNTAiLCJkZXZpY2VfaWQiOiJbMjE4IDI0IDI4IDEyOCAxMTIgMTc0IDEwNSA1MyAxOTggMTg5IDExOCA1OSAyMCA2NyAxNjIgMjFdIn0.8rJXVnqIr7DDutYluGTdX6XfnxhWQNhPlUCg1jw5PHQ",
       }
     },
     created() {
     },
     beforeMount() {
-      this. getCommentList()
     },
     mounted() {
       this.scrollFn()
     },
-    watch: {
-    },
+    watch: {},
     computed: {},
     methods: {
       //获取鉴宝评论列表
-      getCommentList(){
+      getCommentList() {
         this.$axios({
-          method:'GET',
-          url:`${this.$baseURL}/v1/appraisal/evaluation?page=1&limit=10`,
-          'X-Access-Token':`${this.token}`
-        }).then(res=>{
+          method: 'GET',
+          url: `${this.$baseURL}/v1/appraisal/evaluation?page=1&limit=10`,
+          'X-Access-Token': `${this.token}`
+        }).then(res => {
           console.log(res.data)
-        }).catch(error=>{
+        }).catch(error => {
           console.log(error)
         })
       },
       //切换鉴宝天数
-      tabChangeDay(index){
-        this.dayIndex=index
+      tabChangeDay(index) {
+        this.dayIndex = index
       },
       //切换鉴宝真假结果
-      tabChangeResult(index){
-        this.resultIndex=index
+      tabChangeResult(index) {
+        this.resultIndex = index
       },
       scrollFn() {
         this.$nextTick(() => {
@@ -294,70 +294,53 @@
               scrollY: true,
               probeType: 3,
               refreshDelay: 20,
+              bounce: {
+                top: true,
+                bottom: true,
+                left: true,
+                right: true
+              }
             });
           } else {
             this.scroll.refresh();
           }
-          this.scroll.on('scroll', (pos) => {
-            //如果下拉超过50px 就显示刷新中...
-            if (pos.y > 100) {
-              this.dropDown = true
-            }
-            //上拉加载 总高度>下拉的高度+50 触发加载中...
-            if (this.scroll.maxScrollY > pos.y +50) {
-              this.swipeUp = true;
-            }
-          })
-      
-          //touchEnd（手指离开以后触发） 通过这个方法来监听下拉刷新
-          /*this.scroll.on('touchEnd', (pos) => {
-            // 下拉动作
-            if (pos.y > 100) {
-              this.scroll.maxScrollY=this.scroll.maxScrollY+50
-              this.dropDown = true
-              let that = this
-              window.setTimeout(function () {
-                that.dropDown = false;
-                that.scroll.refresh()
-                console.log("下拉刷新成功")
-              }, 2000)
-            }
-            //上拉加载 总高度>下拉的高度+50 触发加载中...
-            if (this.scroll.maxScrollY > pos.y + 50) {
-              this.scroll.maxScrollY=this.scroll.maxScrollY-50
-              this.swipeUp = true;
-              let that = this
-              window.setTimeout(function () {
-                that.swipeUp = false;
-                that.scroll.refresh()//使用refresh 方法 来更新scroll  解决无法滚动的问题
-                console.log("加载成功")
-              }, 2000)
-            }
-          })*/
+          let that = this;
+          // 是否派发滚动事件
+          if (!this.pulldown) {
+            this.scroll.on('pullingDown', (pos) => {
+              if (this.scroll.y > 50) {
+                this.dropDown = true;
+                console.log(111111)
+              }
+            });
+            this.scroll.on('touchEnd', (pos) => {
+              if (this.scroll.y > 50) {
+                this.dropDown = true;
+                window.setTimeout(function () {
+                  that.dropDown = false;
+                  console.log(222222)
+                }, 2000)
+              }
+            });
+          }
           // 是否派发滚动到底部事件，用于上拉加载
           if (!this.pullup) {
-            this.scroll.on('scrollEnd', () => { // 滚动到底部
-              if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
-                
-                this.swipeUp = true;
-                let that = this
+            this.scroll.on('scroll', (pos) => {
+              if (this.scroll.y <= (this.scroll.maxScrollY+50)) {
+                this.pullUp = true;
+                console.log(333333)
+              }
+            });
+            this.scroll.on('scrollEnd', (pos) => { // 滚动到底部
+              if (this.scroll.y <= (this.scroll.maxScrollY+50)) {
                 window.setTimeout(function () {
-                  that.swipeUp = false;
-                  that.scroll.refresh()//使用refresh 方法 来更新scroll  解决无法滚动的问题
-                  console.log("加载成功")
+                  that.pullUp = false
+                  console.log(that.scroll)
                 }, 2000)
               }
             })
           }
           // 是否派发顶部下拉事件，用于下拉刷新
-         /* if (this.pulldown) {
-            this.scroll.on('touchend', (pos) => { // 下拉动作
-              if (pos.y > 50) {
-              
-              }
-            })
-          }*/
-  
         });
       },
     },
@@ -372,33 +355,36 @@
     flex-direction: column;
     margin 0 auto
     padding-bottom 101px
+    
     .list_wrap {
       display: flex;
       flex: 1;
       overflow hidden
+      
       .bscroll {
         width: 100%;
         //max-height: 100%
+        
         .bscroll_container {
           .drop_down {
             text-align center
             font-size: 30px; /*px*/
-            line-height: 100px;
+            line-height: 50px;
             color: #333333;
           }
-      
+          
           .result_wrap {
             padding 0 25px 40px
-    
+            
             .price_total {
               font-size 0
               padding-top 30px
-      
+              
               .price {
                 color: #ac0101;
                 font-size 24px; /*px*/
                 font-weight bold
-        
+                
                 span {
                   display inline-block
                   font-size 36px; /*px*/
@@ -406,48 +392,49 @@
                   font-weight bold
                 }
               }
-      
+              
               .total {
                 color: #999999;
                 font-size 24px; /*px*/
                 line-height 36px; /*px*/
               }
             }
-    
+            
             .title {
               padding-top 44px
-      
+              
               h3 {
                 font-size: 36px; /*px*/
                 color: #333333;
                 font-weight bold
               }
             }
-    
+            
             .result {
               font-size 0
               margin-top 48px
               text-align center
-      
+              
               .img_true {
                 display inline-block
                 vertical-align middle
                 width 51px
                 height 52px
-                img{
+                
+                img {
                   width 100%
                   height 100%
                 }
-        
+                
               }
-      
+              
               .percentage_box {
                 display inline-block
                 font-size 20px; /*px*/
                 vertical-align middle
                 position relative
                 margin 0 20px;
-        
+                
                 .true {
                   position absolute
                   left 5px
@@ -456,7 +443,7 @@
                   color: #333333;
                   font-weight bold
                 }
-        
+                
                 .false {
                   position absolute
                   right 5px
@@ -466,54 +453,55 @@
                   font-weight bold
                 }
               }
-      
+              
               .img_false {
                 display inline-block
                 vertical-align middle
                 width 51px
                 height 52px
-                img{
+                
+                img {
                   width 100%
                   height 100%
                 }
               }
             }
           }
-  
+          
           .line20 {
             width 100%
             height 20px
             background-color #f6f6f6
           }
-  
+          
           .num {
             width 750px
             height 128px
             padding 0 25px
-    
+            
             span {
               font-size: 34px; /*px*/
               line-height 128px
             }
-    
+            
             span:first-child {
               color: #333333;
               font-weight bold
             }
-    
+            
             span:last-child {
               color: #999999;
             }
           }
-  
+          
           .intro_wrap {
             padding 45px 25px 50px
-    
+            
             .intro {
               font-size: 32px; /*px*/
               color: #333333;
               font-weight bold
-      
+              
               span {
                 display inline-block
                 width 6px
@@ -523,12 +511,12 @@
                 margin-right 16px
               }
             }
-    
+            
             .content {
               li {
                 margin-top 30px
                 font-size 0
-        
+                
                 span {
                   font-size 24px; /*px*/
                   display inline-block
@@ -537,19 +525,19 @@
                   font-weight bold
                   color: #999999;
                 }
-        
+                
                 span:last-child {
                   width 590px
                   color: #333333;
                 }
               }
-      
+              
               .price_year {
                 span:nth-child(2) {
                   width 250px
                   color: #333333;
                 }
-        
+                
                 span:nth-child(4) {
                   width 250px
                   color: #333333;
@@ -557,15 +545,15 @@
               }
             }
           }
-  
+          
           .message_wrap {
             padding 45px 25px 0
-    
+            
             .message {
               font-size: 32px; /*px*/
               color: #333333;
               font-weight bold
-      
+              
               span {
                 display inline-block
                 width 6px
@@ -575,10 +563,10 @@
                 margin-right 16px
               }
             }
-    
+            
             .login {
               padding-bottom 30px
-      
+              
               p {
                 width: 480px;
                 margin 40px auto
@@ -586,20 +574,20 @@
                 line-height 36px
                 color: #999999;
                 text-align center
-        
+                
                 span {
                   font-size: 36px;
                   color: #950101;
                 }
               }
-      
+              
               p:last-child {
                 font-size: 24px; /*px*/
                 line-height 28px
               }
-      
+              
             }
-    
+            
             .underway {
               margin 30px auto
               width 100%
@@ -608,11 +596,11 @@
               url("../../common/images/right.png") no-repeat right bottom
               padding 30px
               background-color #f6f6f6
-      
+              
               li {
                 font-size 0
                 margin-top 24px
-        
+                
                 p {
                   font-size: 24px; /*px*/
                   line-height 30px
@@ -622,7 +610,7 @@
                   text-align center
                   font-weight bold
                 }
-        
+                
                 span {
                   display inline-block
                   font-size 24px; /*px*/
@@ -632,28 +620,28 @@
                   color: #999999;
                 }
               }
-      
+              
               .name {
                 margin-top 0
-        
+                
                 span:last-child {
                   width 500px
                   color: #333333;
                 }
               }
-      
+              
               .price_year {
                 span:nth-child(2) {
                   width 200px
                   color: #333333;
                 }
-        
+                
                 span:nth-child(4) {
                   width 155px
                   color: #333333;
                 }
               }
-      
+              
               .time {
                 span:last-child {
                   width 400px
@@ -661,10 +649,10 @@
                 }
               }
             }
-    
+            
             .waiting {
               padding 60px 0
-      
+              
               p {
                 width: 310px;
                 margin 0 auto
@@ -674,7 +662,7 @@
               }
             }
           }
-  
+          
           .list {
             .line10 {
               width 740px
@@ -682,27 +670,27 @@
               margin 0 auto
               background-color #f6f6f6
             }
-    
+            
             .list_content {
               width 700px
               margin 0 auto
               padding-top 20px
               padding-bottom 20px
               position relative
-      
+              
               ul {
                 li {
                   margin-top 20px
                   font-size: 0;
                   color: #999999;
                 }
-        
+                
                 .phone_identity {
                   span {
                     font-size: 24px; /*px*/
                     display inline-block
                   }
-          
+                  
                   span:first-child {
                     font-size: 28px; /*px*/
                     font-weight bold
@@ -710,19 +698,19 @@
                     margin-right 46px
                   }
                 }
-        
+                
                 .total {
                   font-size: 24px; /*px*/
                 }
-        
+                
                 .time_launch {
                   font-size: 24px; /*px*/
-          
+                  
                   span:nth-child(2) {
                     width 280px
                   }
                 }
-        
+                
                 .verdict {
                   p {
                     font-size: 24px; /*px*/
@@ -730,39 +718,43 @@
                   }
                 }
               }
+              
               .list_true {
                 position absolute
                 top 20px
                 right 25px
                 width 73px
                 height 75px
-                img{
+                
+                img {
                   width 100%
                   height 100%
                 }
               }
-      
+              
               .list_false {
                 position absolute
                 top 20px
                 right 25px
                 width 73px
                 height 75px
-                img{
+                
+                img {
                   width 100%
                   height 100%
                 }
               }
             }
           }
-          .swipe_up {
+          
+          .pull_up {
             text-align center
             font-size: 30px; /*px*/
-            line-height: 50px;
+            line-height: 30px;
             color: #333333;
           }
         }
-    
+        
       }
       
     }
@@ -775,6 +767,7 @@
       position fixed
       bottom 0
       background-color #ffffff
+      
       span {
         display inline-block
         width 375px;
@@ -801,6 +794,7 @@
     height 750px
     margin 0 auto
     box-shadow: inset -2px -8px 19px 0px rgba(8, 0, 2, 0.03);
+    
     .awesome_swiper {
       .swiper-wrapper {
         width 750px
@@ -855,41 +849,45 @@
         height 334px
         padding-top 15px
         font-size 0
+        
         h4 {
           width 466px
           height 61px
           margin 0 auto
           text-align center
           line-height 61px
-          font-size: 36px;/*px*/
+          font-size: 36px; /*px*/
           color: #333333;
           background-image: url(../../common/images/border1.png);
           background-repeat: no-repeat;
           background-size: 100% 100%;
           -moz-background-size: 100% 100%;
-  
+          
         }
         
         p {
           margin 65px auto
           text-align center
-          font-size: 48px;/*px*/
+          font-size: 48px; /*px*/
           font-weight bold
           color: #333333;
         }
-        .btn{
+        
+        .btn {
           box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
+          
           span {
             width 285px
             height 80px
             line-height 80px
             text-align center
             display inline-block
-            font-size: 36px;/*px*/
+            font-size: 36px; /*px*/
             color: #950101;
           }
-          a{
-            span{
+          
+          a {
+            span {
               background-color #950101
               color: #ffffff;
             }
@@ -898,51 +896,56 @@
       }
     }
   }
+  
   .dialog_launch {
     .el-dialog {
       margin-top 28vh !important
-    
+      
       .el-dialog__header {
         display none
       }
-    
+      
       .el-dialog__body {
         padding 0
         padding-top 15px
         font-size 0
+        
         h4 {
           width 466px
           height 61px
           margin 0 auto
           text-align center
           line-height 61px
-          font-size: 36px;/*px*/
+          font-size: 36px; /*px*/
           color: #333333;
           background-image: url(../../common/images/border1.png);
           background-repeat: no-repeat;
           background-size: 100% 100%;
           -moz-background-size: 100% 100%;
-        
+          
         }
-      
-        .select_time{
+        
+        .select_time {
           text-align center
           margin-top 28px
           margin-bottom 38px
-          .til{
+          
+          .til {
             display inline-block
             height 44px
             line-height 44px
-            font-size: 26px;/*px*/
+            font-size: 26px; /*px*/
             color: #333333;
             vertical-align top
           }
-          label{
+          
+          label {
             font-size 0
-            a{
+            
+            a {
               display inline-block
               background-color: #999999;
-              font-size: 26px;/*px*/
+              font-size: 26px; /*px*/
               color: #ffffff;
               width 88px
               height 44px
@@ -950,52 +953,60 @@
               margin-right 10px
             }
           }
-          .active{
-            a{
+          
+          .active {
+            a {
               background-color #950101
             }
           }
         }
-        .money_wrap{
+        
+        .money_wrap {
           text-align center
           margin-top 28px
           margin-bottom 38px
           font-size 0
-          .til{
+          
+          .til {
             display inline-block
             height 44px
             line-height 44px
-            font-size: 26px;/*px*/
+            font-size: 26px; /*px*/
             color: #333333;
             vertical-align top
           }
-          input{
+          
+          input {
             width 290px
             height 44px
             padding-left 20px
-            font-size: 26px;/*px*/
+            font-size: 26px; /*px*/
             color: #999999;
             vertical-align top
             border: solid 3px #bfbfbf;
             background-color #ffffff
           }
         }
-        .line8{
+        
+        .line8 {
           width 100%
           height 8px
           background-color #eeeeee;
         }
-        .send{
+        
+        .send {
           margin-top 32px
           font-size 0
           text-align center
-          span:first-child{
+          
+          span:first-child {
             display inline-block
-            font-size 22px;/*px*/
+            font-size 22px; /*px*/
           }
-          span:last-child{
+          
+          span:last-child {
             display inline-block
-            font-size 24px;/*px*/
+            font-size 24px; /*px*/
             color: #ffffff;
             width 100px
             height 44px
@@ -1004,19 +1015,22 @@
             margin-left 12px
           }
         }
-        .currency{
+        
+        .currency {
           height 32px
           font-size 0
           padding-left 40px
           padding-right 40px
           margin-top 40px
-          span{
+          
+          span {
             display inline-block
-            font-size: 30px;/*px*/
+            font-size: 30px; /*px*/
             color: #333333;
             line-height 32px
           }
-          span:last-child{
+          
+          span:last-child {
             width 17px
             height 32px
             background-image: url(../../common/images/jiantou.png);
@@ -1025,28 +1039,32 @@
             -moz-background-size: 100% 100%;
           }
         }
-        .code{
+        
+        .code {
           text-align center
-          input{
+          
+          input {
             padding-left 25px
             width 490px
             height 50px
-            font-size 20px;/*px*/
+            font-size 20px; /*px*/
             margin-top 24px
             margin-bottom 48px
             color #999999
             border: solid 1px #bfbfbf;
           }
         }
-        .btn{
+        
+        .btn {
           box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
+          
           span {
             width 570px
             height 80px
             line-height 80px
             text-align center
             display inline-block
-            font-size: 36px;/*px*/
+            font-size: 36px; /*px*/
             background-color #950101;
             color: #ffffff;
           }
@@ -1054,51 +1072,56 @@
       }
     }
   }
+  
   .dialog_authenticate {
     .el-dialog {
       margin-top 28vh !important
-    
+      
       .el-dialog__header {
         display none
       }
-    
+      
       .el-dialog__body {
         padding 0
         padding-top 15px
         font-size 0
+        
         h4 {
           width 466px
           height 61px
           margin 0 auto
           text-align center
           line-height 61px
-          font-size: 36px;/*px*/
+          font-size: 36px; /*px*/
           color: #333333;
           background-image: url(../../common/images/border1.png);
           background-repeat: no-repeat;
           background-size: 100% 100%;
           -moz-background-size: 100% 100%;
-        
+          
         }
-      
-        .select_result{
+        
+        .select_result {
           text-align center
           margin-top 28px
           margin-bottom 38px
-          .til{
+          
+          .til {
             display inline-block
             height 44px
             line-height 44px
-            font-size: 26px;/*px*/
+            font-size: 26px; /*px*/
             color: #333333;
             vertical-align top
           }
-          label{
+          
+          label {
             font-size 0
-            a{
+            
+            a {
               display inline-block
               background-color: #999999;
-              font-size: 26px;/*px*/
+              font-size: 26px; /*px*/
               color: #ffffff;
               width 167px
               height 59px
@@ -1106,27 +1129,30 @@
               margin-right 10px
             }
           }
-          .active{
-            a{
+          
+          .active {
+            a {
               background-color #950101
             }
           }
         }
-        .comment_wrap{
+        
+        .comment_wrap {
           text-align center
           margin-top 28px
           margin-bottom 38px
           font-size 0
           
-          .til{
+          .til {
             display inline-block
             height 44px
             line-height 44px
-            font-size: 26px;/*px*/
+            font-size: 26px; /*px*/
             color: #333333;
             vertical-align top
           }
-          .comment{
+          
+          .comment {
             display inline-block
             width: 384px;
             height: 522px;
@@ -1134,34 +1160,38 @@
             padding 15px
             background-color #ffffff
             position relative
-            textarea{
+            
+            textarea {
               width 100%
               min-height 452px
               border none
-              font-size: 26px;/*px*/
+              font-size: 26px; /*px*/
               color: #999999;
               vertical-align top
               background-color #ffffff
             }
-            .tips{
+            
+            .tips {
               display inline-block
               position absolute
               bottom 15px
               right 15px
-              font-size: 22px;/*px*/
+              font-size: 22px; /*px*/
               color: #999999;
             }
           }
         }
-        .btn{
+        
+        .btn {
           box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
+          
           span {
             width 570px
             height 80px
             line-height 80px
             text-align center
             display inline-block
-            font-size: 36px;/*px*/
+            font-size: 36px; /*px*/
             background-color #950101;
             color: #ffffff;
           }
