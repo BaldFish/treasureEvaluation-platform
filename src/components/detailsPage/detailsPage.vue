@@ -6,26 +6,26 @@
           <div class="drop_down" v-if="dropDown">刷新中...</div>
           <div class="swiper_wrap">
             <swiper :options="swiperOption" class="awesome_swiper" ref="swiperOption">
-              <swiper-slide v-for="(slide, index) in slides" :key="index" v-if="slides.length">
-                <img :src="slide.url" alt="">
+              <swiper-slide v-for="(slide, index) in assetInfo.img" :key="index" v-if="assetInfo.img.length">
+                <img :src="slide" alt="">
               </swiper-slide>
-              <div class="swiper-pagination" slot="pagination"></div>
+              <div class="swiper-pagination" slot="pagination" v-if="assetInfo.img.length>1"></div>
             </swiper>
           </div>
           <div class="result_wrap">
             <div class="price_total clearfix">
-              <div class="price fl">¥<span>1778800.00</span></div>
-              <div class="total fr">累计鉴宝人数: 9999个</div>
+              <div class="price fl">¥<span>17000.00</span></div>
+              <div class="total fr">累计鉴宝人数: {{assetInfo.people_count}}个</div>
             </div>
             <div class="title">
-              <h3>清宣统官造铜胎鎏银画珐珐琅琅奖牌</h3>
+              <h3>{{assetInfo.name}}</h3>
             </div>
             <div class="result">
               <div class="img_true"><img src="@/common/images/true1.png" alt="真"></div>
               <div class="percentage_box">
-                <span class="true">80%</span>
-                <span class="false">20%</span>
-                <my-progressBar :percentage="result.percentage"></my-progressBar>
+                <span class="true">{{assetInfo.result}}%</span>
+                <span class="false">{{100-assetInfo.result}}%</span>
+                <my-progressBar :percentage="assetInfo.result"></my-progressBar>
               </div>
               <div class="img_false"><img src="@/common/images/false1.png" alt="假"></div>
             </div>
@@ -33,92 +33,64 @@
           <div class="line20"></div>
           <div class="num">
             <span>数量：</span>
-            <span>共2件</span>
+            <span>共{{assetInfo.count}}件</span>
           </div>
           <div class="line20"></div>
           <div class="intro_wrap">
             <h4 class="intro"><span></span>商品简介</h4>
             <ul class="content">
-              <li class="name"><span>名称：</span><span>清乾隆早期铜胎掐丝珐琅花鸟纹尊</span></li>
-              <li class="price_year"><span>价格：</span><span>17788000</span><span>年代：</span><span>清乾隆</span></li>
+              <li class="name"><span>名称：</span><span>{{assetInfo.name}}</span></li>
+              <li class="price_year"><span>价格：</span><span>17000.00</span><span>年代：</span><span>{{assetInfo.age}}</span></li>
               <li class="size"><span>尺寸：</span><span>直径28cm、通高33cm、罐高20cm直径28cm、通高33cm、罐高20cm</span></li>
-              <li class="description"><span>描述：</span><span>清乾隆早期铜胎掐丝珐琅花鸟纹尊全品，罐外铜活为清
-			代法国所配，罐可转动。法国所配，罐可转动。</span></li>
+              <li class="description"><span>描述：</span><span>{{assetInfo.desc}}</span></li>
             </ul>
           </div>
           <div class="line20"></div>
           <div class="message_wrap">
             <h4 class="message"><span></span>鉴宝留言</h4>
-            <!--<div class="login">
-              <p>您未 <span>登陆</span>，请先登录后查看留言；</p>
+            <div class="login" v-if="!login">
+              <p>您未
+                <router-link to="/login">登陆</router-link>
+                ，请先登录后查看留言；
+              </p>
               <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
-            </div>-->
-            <div class="underway">
+            </div>
+            <div class="underway" v-if="login&&assetInfo.appraisal_status!==0">
               <ul>
-                <li class="name"><span>名称：</span><span>清乾隆早期铜胎掐丝珐琅花鸟纹尊</span></li>
-                <li class="price_year"><span>悬赏版通金额：</span><span>170000.00</span><span>年代：</span><span>清乾隆</span></li>
-                <li class="time"><span>鉴宝结束时间：</span><span>2019-02-28 14:12:34</span></li>
+                <li class="name"><span>名称：</span><span>{{assetInfo.name}}</span></li>
+                <li class="price_year"><span>悬赏版通金额：</span><span>{{assetInfo.price}}</span><span>年代：</span><span>{{assetInfo.age}}</span></li>
+                <li class="time"><span>鉴宝结束时间：</span><span>{{assetInfo.end_time}}</span></li>
                 <li class="remark"><p>*注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p></li>
               </ul>
             </div>
-            <!--<div class="waiting">
+            <div class="waiting" v-if="login&&assetInfo.appraisal_status===0">
               <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
-            </div>-->
+            </div>
           </div>
-          <div class="list">
+          <div class="list" v-for="(item,index) of messageList" :key="index">
             <div class="line10"></div>
             <div class="list_content">
               <ul>
                 <li class="phone_identity">
-                  <span>186****1680</span>
-                  <span>古瓷器专家</span>
+                  <span>{{item.appraiser_phone}}</span>
+                  <span>{{item.auth_status}}</span>
                 </li>
                 <li class="total">
-                  <p>累计鉴定2097次</p>
+                  <p>累计鉴定{{item.appraisal_count}}次</p>
                 </li>
-                <li class="time_launch">
-                  <span>鉴宝时间：</span>
-                  <span>2019-02-28 13:12</span>
-                  <span>鉴定发起人：</span>
-                  <span>139****2412</span>
-                </li>
-                <li class="verdict">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus
-                    accumsan
-                    et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
-                    ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
-                </li>
-              </ul>
-              <div class="list_true"><img src="@/common/images/true2.png" alt="真"></div>
-            </div>
-          </div>
-          <div class="list">
-            <div class="line10"></div>
-            <div class="list_content">
-              <ul>
-                <li class="phone_identity">
-                  <span>186****1680</span>
-                  <span>古瓷器专家</span>
-                </li>
-                <li class="total">
-                  <p>累计鉴定2097次</p>
-                </li>
-                <li class="time_launch">
-                  <span>鉴宝时间：</span>
-                  <span>2019-02-28 13:12</span>
-                  <span>鉴定发起人：</span>
-                  <span>139****2412</span>
+                <li class="time_launch clearfix">
+                  <span>鉴宝时间:</span>
+                  <span>{{item.datetime}}</span>
+                  <span class="fr">{{item.sponsor_phone}}</span>
+                  <span class="fr">发起人:</span>
                 </li>
                 <li class="verdict">
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus
-                    accumsan
-                    et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
-                    ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.</p>
+                  <p>{{item.comments}}</p>
                 </li>
               </ul>
-              <div class="list_false"><img src="@/common/images/false2.png" alt="真"></div>
+              <div class="list_true" v-if="item.result===1"><img src="@/common/images/true2.png" alt="真"></div>
+              <div class="list_false" v-if="item.result===2"><img src="@/common/images/false2.png" alt="假"></div>
             </div>
-          
           </div>
           <div class="pull_up" v-if="pullUp">加载中...</div>
         </div>
@@ -213,17 +185,6 @@
     components: {myProgressBar},
     data() {
       return {
-        slides: [
-          {
-            url: require('../../common/images/banner1.png')
-          },
-          {
-            url: require('../../common/images/banner2.jpg')
-          },
-          {
-            url: require('../../common/images/banner3.jpg')
-          }
-        ],
         swiperOption: {
           loop: true,
           autoplay: {
@@ -235,9 +196,6 @@
           pagination: {
             el: '.swiper-pagination'
           },
-        },
-        result: {
-          percentage: 80
         },
         contactDialogVisible: false,
         launchDialogVisible: false,
@@ -254,11 +212,24 @@
         code: "",
         comment: "",
         token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjI5OTg5NTksInVzZXJfaWQiOiI1YTZiZTc0YTU1YWFmNTAwMDFhNWUyNTAiLCJkZXZpY2VfaWQiOiJbMjE4IDI0IDI4IDEyOCAxMTIgMTc0IDEwNSA1MyAxOTggMTg5IDExOCA1OSAyMCA2NyAxNjIgMjFdIn0.8rJXVnqIr7DDutYluGTdX6XfnxhWQNhPlUCg1jw5PHQ",
+        assetId: "5c774551185c871d94bc81e1",
+        assetInfo: {
+          img: [],
+          result: 0,
+        },
+        login: true,
+        page: 1,
+        limit: 5,
+        total: 1,
+        messageList: [],
+        pullUpTips:"加载中...",
       }
     },
     created() {
     },
     beforeMount() {
+      this.getAssetDetails();
+      this.getCommentList();
     },
     mounted() {
       this.scrollFn()
@@ -266,14 +237,42 @@
     watch: {},
     computed: {},
     methods: {
+      //获取资产详情描述信息
+      getAssetDetails() {
+        this.$axios({
+          method: 'GET',
+          url: `${this.$baseURL}/v1/appraisal/products/${this.assetId}`,
+          headers: {
+            'X-Access-Token': `${this.token}`
+          }
+        }).then(res => {
+          res.data.data.end_time = this.$utils.formatDate(new Date(res.data.data.end_time), "yyyy-MM-dd hh:mm:ss");
+          this.assetInfo = res.data.data;
+        }).catch(error => {
+          console.log(error)
+        })
+      },
       //获取鉴宝评论列表
       getCommentList() {
         this.$axios({
           method: 'GET',
-          url: `${this.$baseURL}/v1/appraisal/evaluation?page=1&limit=10`,
-          'X-Access-Token': `${this.token}`
+          url: `${this.$baseURL}/v1/appraisal/evaluation?page=${this.page}&limit=${this.limit}`,
+          headers: {
+            'X-Access-Token': `${this.token}`
+          }
         }).then(res => {
-          console.log(res.data)
+          this.dropDown = false;
+          this.pullUp = false;
+          console.log(res.data.data.valuation_info);
+          if(res.data.data.valuation_info.length>0){
+            let that = this;
+            res.data.data.valuation_info.forEach(function (item) {
+              item.datetime = that.$utils.formatDate(new Date(item.datetime), "yyyy-MM-dd hh:mm:ss");
+            });
+            this.total = res.data.data.valuation_count;
+            this.messageList = this.messageList.concat(res.data.data.valuation_info);
+            this.page=this.page+1
+          }else{}
         }).catch(error => {
           console.log(error)
         })
@@ -305,7 +304,7 @@
             this.scroll.refresh();
           }
           let that = this;
-          // 是否派发滚动事件
+          // 下拉刷新
           if (!this.pulldown) {
             this.scroll.on('pullingDown', (pos) => {
               if (this.scroll.y > 50) {
@@ -323,24 +322,19 @@
               }
             });
           }
-          // 是否派发滚动到底部事件，用于上拉加载
+          // 用于上拉加载
           if (!this.pullup) {
             this.scroll.on('scroll', (pos) => {
-              if (this.scroll.y <= (this.scroll.maxScrollY+50)) {
+              if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
                 this.pullUp = true;
-                console.log(333333)
               }
             });
             this.scroll.on('scrollEnd', (pos) => { // 滚动到底部
-              if (this.scroll.y <= (this.scroll.maxScrollY+50)) {
-                window.setTimeout(function () {
-                  that.pullUp = false
-                  console.log(that.scroll)
-                }, 2000)
+              if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+                that.getCommentList()
               }
             })
           }
-          // 是否派发顶部下拉事件，用于下拉刷新
         });
       },
     },
@@ -575,7 +569,7 @@
                 color: #999999;
                 text-align center
                 
-                span {
+                a {
                   font-size: 36px;
                   color: #950101;
                 }
@@ -705,10 +699,6 @@
                 
                 .time_launch {
                   font-size: 24px; /*px*/
-                  
-                  span:nth-child(2) {
-                    width 280px
-                  }
                 }
                 
                 .verdict {
