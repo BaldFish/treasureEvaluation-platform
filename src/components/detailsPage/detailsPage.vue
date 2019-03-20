@@ -1,101 +1,107 @@
 <template>
   <div class="detailsPage">
-    <div class="list_wrap">
-      <div class="bscroll" ref="bscroll">
-        <div class="bscroll_container">
-          <div class="drop_down" v-if="dropDown">刷新中...</div>
-          <div class="swiper_wrap">
-            <swiper :options="swiperOption" class="awesome_swiper" ref="swiperOption">
-              <swiper-slide v-for="(slide, index) in assetInfo.img" :key="index" v-if="assetInfo.img.length">
-                <img :src="slide" alt="">
-              </swiper-slide>
-              <div class="swiper-pagination" slot="pagination" v-if="assetInfo.img.length>1"></div>
-            </swiper>
-          </div>
-          <div class="result_wrap">
-            <div class="price_total clearfix">
-              <div class="price fl">¥<span>17000.00</span></div>
-              <div class="total fr">累计鉴宝人数: {{assetInfo.people_count}}个</div>
+    <scroller
+              :on-refresh="refresh"
+              :on-infinite="infinite"
+              ref="my_scroller">
+      <div class="list_wrap">
+        <div class="bscroll" ref="bscroll">
+          <div class="bscroll_container">
+            <div class="drop_down" v-if="dropDown">刷新中...</div>
+            <div class="swiper_wrap">
+              <swiper :options="swiperOption" class="awesome_swiper" ref="swiperOption">
+                <swiper-slide v-for="(slide, index) in assetInfo.img" :key="index" v-if="assetInfo.img.length">
+                  <img :src="slide" alt="">
+                </swiper-slide>
+                <div class="swiper-pagination" slot="pagination" v-if="assetInfo.img.length>1"></div>
+              </swiper>
             </div>
-            <div class="title">
-              <h3>{{assetInfo.name}}</h3>
-            </div>
-            <div class="result">
-              <div class="img_true"><img src="@/common/images/true1.png" alt="真"></div>
-              <div class="percentage_box">
-                <span class="true">{{assetInfo.result}}%</span>
-                <span class="false">{{100-assetInfo.result}}%</span>
-                <my-progressBar :percentage="assetInfo.result"></my-progressBar>
+            <div class="result_wrap">
+              <div class="price_total clearfix">
+                <div class="price fl">¥<span>17000.00</span></div>
+                <div class="total fr">累计鉴宝人数: {{assetInfo.people_count}}个</div>
               </div>
-              <div class="img_false"><img src="@/common/images/false1.png" alt="假"></div>
+              <div class="title">
+                <h3>{{assetInfo.name}}</h3>
+              </div>
+              <div class="result">
+                <div class="img_true"><img src="@/common/images/true1.png" alt="真"></div>
+                <div class="percentage_box">
+                  <span class="true">{{assetInfo.result}}%</span>
+                  <span class="false">{{100-assetInfo.result}}%</span>
+                  <my-progressBar :percentage="assetInfo.result"></my-progressBar>
+                </div>
+                <div class="img_false"><img src="@/common/images/false1.png" alt="假"></div>
+              </div>
             </div>
-          </div>
-          <div class="line20"></div>
-          <div class="num">
-            <span>数量：</span>
-            <span>共{{assetInfo.count}}件</span>
-          </div>
-          <div class="line20"></div>
-          <div class="intro_wrap">
-            <h4 class="intro"><span></span>商品简介</h4>
-            <ul class="content">
-              <li class="name"><span>名称：</span><span>{{assetInfo.name}}</span></li>
-              <li class="price_year"><span>价格：</span><span>17000.00</span><span>年代：</span><span>{{assetInfo.age}}</span></li>
-              <li class="size"><span>尺寸：</span><span>直径28cm、通高33cm、罐高20cm直径28cm、通高33cm、罐高20cm</span></li>
-              <li class="description"><span>描述：</span><span>{{assetInfo.desc}}</span></li>
-            </ul>
-          </div>
-          <div class="line20"></div>
-          <div class="message_wrap">
-            <h4 class="message"><span></span>鉴宝留言</h4>
-            <div class="login" v-if="!login">
-              <p>您未
-                <router-link to="/login">登陆</router-link>
-                ，请先登录后查看留言；
-              </p>
-              <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
+            <div class="line20"></div>
+            <div class="num">
+              <span>数量：</span>
+              <span>共{{assetInfo.count}}件</span>
             </div>
-            <div class="underway" v-if="login&&assetInfo.appraisal_status!==0">
-              <ul>
+            <div class="line20"></div>
+            <div class="intro_wrap">
+              <h4 class="intro"><span></span>商品简介</h4>
+              <ul class="content">
                 <li class="name"><span>名称：</span><span>{{assetInfo.name}}</span></li>
-                <li class="price_year"><span>悬赏版通金额：</span><span>{{assetInfo.price}}</span><span>年代：</span><span>{{assetInfo.age}}</span></li>
-                <li class="time"><span>鉴宝结束时间：</span><span>{{assetInfo.end_time}}</span></li>
-                <li class="remark"><p>*注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p></li>
+                <li class="price_year"><span>价格：</span><span>17000.00</span><span>年代：</span><span>{{assetInfo.age}}</span></li>
+                <li class="size"><span>尺寸：</span><span>直径28cm、通高33cm、罐高20cm直径28cm、通高33cm、罐高20cm</span></li>
+                <li class="description"><span>描述：</span><span>{{assetInfo.desc}}</span></li>
               </ul>
             </div>
-            <div class="waiting" v-if="login&&assetInfo.appraisal_status===0">
-              <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
+            <div class="line20"></div>
+            <div class="message_wrap">
+              <h4 class="message"><span></span>鉴宝留言</h4>
+              <div class="login" v-if="!login">
+                <p>您未
+                  <router-link to="/login">登陆</router-link>
+                  ，请先登录后查看留言；
+                </p>
+                <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
+              </div>
+              <div class="underway" v-if="login&&assetInfo.appraisal_status!==0">
+                <ul>
+                  <li class="name"><span>名称：</span><span>{{assetInfo.name}}</span></li>
+                  <li class="price_year"><span>悬赏版通金额：</span><span>{{assetInfo.price}}</span><span>年代：</span><span>{{assetInfo.age}}</span></li>
+                  <li class="time"><span>鉴宝结束时间：</span><span>{{assetInfo.end_time}}</span></li>
+                  <li class="remark"><p>*注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p></li>
+                </ul>
+              </div>
+              <div class="waiting" v-if="login&&assetInfo.appraisal_status===0">
+                <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
+              </div>
             </div>
-          </div>
-          <div class="list" v-for="(item,index) of messageList" :key="index">
-            <div class="line10"></div>
-            <div class="list_content">
-              <ul>
-                <li class="phone_identity">
-                  <span>{{item.appraiser_phone}}</span>
-                  <span>{{item.auth_status}}</span>
-                </li>
-                <li class="total">
-                  <p>累计鉴定{{item.appraisal_count}}次</p>
-                </li>
-                <li class="time_launch clearfix">
-                  <span>鉴宝时间:</span>
-                  <span>{{item.datetime}}</span>
-                  <span class="fr">{{item.sponsor_phone}}</span>
-                  <span class="fr">发起人:</span>
-                </li>
-                <li class="verdict">
-                  <p>{{item.comments}}</p>
-                </li>
-              </ul>
-              <div class="list_true" v-if="item.result===1"><img src="@/common/images/true2.png" alt="真"></div>
-              <div class="list_false" v-if="item.result===2"><img src="@/common/images/false2.png" alt="假"></div>
+            <div class="list" v-for="(item,index) of messageList" :key="index">
+              <div class="line10"></div>
+              <div class="list_content">
+                <ul>
+                  <li class="phone_identity">
+                    <span>{{item.appraiser_phone}}</span>
+                    <span>{{item.auth_status}}</span>
+                  </li>
+                  <li class="total">
+                    <p>累计鉴定{{item.appraisal_count}}次</p>
+                  </li>
+                  <li class="time_launch clearfix">
+                    <span>鉴宝时间:</span>
+                    <span>{{item.datetime}}</span>
+                    <span class="fr">{{item.sponsor_phone}}</span>
+                    <span class="fr">发起人:</span>
+                  </li>
+                  <li class="verdict">
+                    <p>{{item.comments}}</p>
+                  </li>
+                </ul>
+                <div class="list_true" v-if="item.result===1"><img src="@/common/images/true2.png" alt="真"></div>
+                <div class="list_false" v-if="item.result===2"><img src="@/common/images/false2.png" alt="假"></div>
+              </div>
             </div>
+            <div class="pull_up" v-if="pullUp">加载中...</div>
           </div>
-          <div class="pull_up" v-if="pullUp">加载中...</div>
         </div>
       </div>
-    </div>
+    </scroller>
+    
     <div class="dialog_contact">
       <el-dialog
         title="提示"
@@ -178,11 +184,12 @@
 
 <script>
   import BScroll from 'better-scroll'
+  import scroll from './scroll'
   import myProgressBar from "../progressBar/progressBar"
   
   export default {
     name: "detailsPage",
-    components: {myProgressBar},
+    components: {myProgressBar,scroll},
     data() {
       return {
         swiperOption: {
@@ -223,6 +230,7 @@
         total: 1,
         messageList: [],
         pullUpTips:"加载中...",
+        items:[],
       }
     },
     created() {
@@ -232,11 +240,99 @@
       this.getCommentList();
     },
     mounted() {
+      for (let i = 1; i <= 20; i++) {
+        this.items.push(i + ' - keep walking, be 2 with you.')
+      }
+      this.top = 1
+      this.bottom = 20
       this.scrollFn()
     },
     watch: {},
     computed: {},
     methods: {
+      refresh(done) {
+        setTimeout(() => {
+          let start = this.top - 1
+          for (let i = start; i > start - 10; i--) {
+            this.items.splice(0, 0, i + ' - keep walking, be 2 with you.')
+          }
+          this.top = this.top - 10;
+          done()
+        }, 1500)
+      },
+      infinite(done) {
+        if (this.bottom >= 20) {
+          setTimeout(() => {
+            done(true)
+            this.infinite = undefined
+          }, 1500)
+          return;
+        }
+        setTimeout(() => {
+          let start = this.bottom + 1
+          for (let i = start; i < start + 5; i++) {
+            this.items.push(i + ' - keep walking, be 2 with you.')
+          }
+          this.bottom = this.bottom + 5;
+          setTimeout(() => {
+            done()
+          })
+        }, 1500)
+      },
+      //下拉刷新
+      refreshData(done){
+        this.page=1;
+        this.$axios({
+          method: 'GET',
+          url: `${this.$baseURL}/v1/appraisal/evaluation?page=${this.page}&limit=${this.limit}`,
+          headers: {
+            'X-Access-Token': `${this.token}`
+          }
+        }).then(res => {
+          this.total = res.data.data.valuation_count;
+          let that = this;
+          res.data.data.valuation_info.forEach(function (item) {
+            item.datetime = that.$utils.formatDate(new Date(item.datetime), "yyyy-MM-dd hh:mm:ss");
+          });
+          this.messageList = res.data.data.valuation_info;
+          console.log(res.data.data.valuation_info,this.messageList)
+          this.page++;
+          done()
+      
+        }).catch(error => {
+          console.log(error)
+        })
+      },
+      //上拉加载
+      loadData(done){
+        this.$axios({
+          method: 'GET',
+          url: `${this.$baseURL}/v1/appraisal/evaluation?page=${this.page}&limit=${this.limit}`,
+          headers: {
+            'X-Access-Token': `${this.token}`
+          }
+        }).then(res => {
+          this.total = res.data.data.valuation_count;
+          if(this.messageList.length<this.total){
+            let that = this;
+            res.data.data.valuation_info.forEach(function (item) {
+              item.datetime = that.$utils.formatDate(new Date(item.datetime), "yyyy-MM-dd hh:mm:ss");
+            });
+            this.messageList = this.messageList.concat(res.data.data.valuation_info);
+            console.log(res.data.data.valuation_info,this.messageList)
+            this.page++;
+            done()
+          }else{
+            setTimeout(() => {
+              done(true)
+              this.loadData = undefined
+            }, 1500)
+            return;
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+      },
       //获取资产详情描述信息
       getAssetDetails() {
         this.$axios({
@@ -271,7 +367,7 @@
             });
             this.total = res.data.data.valuation_count;
             this.messageList = this.messageList.concat(res.data.data.valuation_info);
-            this.page=this.page+1
+            this.page++
           }else{}
         }).catch(error => {
           console.log(error)

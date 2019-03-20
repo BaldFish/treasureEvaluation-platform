@@ -4,10 +4,6 @@
               :on-refresh="refresh"
               :on-infinite="infinite"
               ref="my_scroller">
-      
-      <div v-for="(item, index) in items" class="row" :class="{'grey-bg': index % 2 == 0}">
-        {{ item }}
-      </div>
     </scroller>
   </div>
 </template>
