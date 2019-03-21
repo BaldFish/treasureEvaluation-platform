@@ -56,7 +56,7 @@
             </p>
             <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
           </div>
-          <div class="underway" v-if="login&&assetInfo.appraisal_status!==0">
+          <div class="underway" v-else-if="login&&assetInfo.appraisal_status!==0">
             <ul>
               <li class="name"><span>名称：</span><span>{{assetInfo.name}}</span></li>
               <li class="price_year"><span>悬赏版通金额：</span><span>{{assetInfo.price}}</span><span>年代：</span><span>{{assetInfo.age}}</span></li>
@@ -64,7 +64,7 @@
               <li class="remark"><p>*注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p></li>
             </ul>
           </div>
-          <div class="waiting" v-if="login&&assetInfo.appraisal_status===0">
+          <div class="waiting" v-else>
             <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
           </div>
         </div>
@@ -104,8 +104,8 @@
         <h4>联系卖家</h4>
         <p>18787627373</p>
         <div class="btn">
-          <span>取消</span>
-          <a href="tel:18787627373"><span>呼叫</span></a>
+          <span @click="contactDialogVisible=false">取消</span>
+          <a href="tel:18787627373" @click="contactDialogVisible=false"><span>呼叫</span></a>
         </div>
       </el-dialog>
     </div>
@@ -119,17 +119,18 @@
         <div class="select_time">
           <span class="til">鉴宝时间：</span>
           <label v-for="(item,index) of selectTime" :class="{'active': index===dayIndex,}" @click="tabChangeDay(index)">
-            <a>{{item}}</a><input type="radio" :value="item" v-model="dayRadio">
+            <a>{{item}}</a><input type="radio" :value="item==='1个月'?32:parseInt(item)" v-model="dayRadio">
           </label>
         </div>
         <div class="money_wrap">
           <span class="til">悬赏版通：</span>
-          <input type="text" v-model="money">
+          <input type="number" v-model="money">
         </div>
         <div class="line8"></div>
         <div class="send">
-          <span>请输入手机号186****1680短信验证码</span>
-          <span>发送</span>
+          <span v-cloak>请输入尾号{{this.phone.substr(-4)}}短信验证码</span>
+          <span v-if="codeValue" @click="getPhoneCode">发送</span>
+          <span v-else style="background-color: #7d7d7d;color: #ffffff;">倒计时（{{second}}）</span>
         </div>
         <div class="currency clearfix">
           <span>板通</span>
@@ -139,7 +140,7 @@
           <input type="text" v-model="code" placeholder="请输入短信验证码">
         </div>
         <div class="btn">
-          <span>提交</span>
+          <span @click="launchTreasureAppraisal">提交</span>
         </div>
       </el-dialog>
     </div>
@@ -153,24 +154,28 @@
         <div class="select_result">
           <span class="til">鉴宝结果：</span>
           <label v-for="(item,index) of selectResult" :class="{'active': index===resultIndex,}" @click="tabChangeResult(index)">
-            <a>{{item}}</a><input type="radio" name="" :value="item" v-model="resultRadio">
+            <a>{{item}}</a><input type="radio" name="" :value="item==='真'?1:2" v-model="resultRadio">
           </label>
         </div>
         <div class="comment_wrap">
           <span class="til">评论：</span>
           <div class="comment">
-            <textarea v-model="comment" minlength="10" maxlength="500"></textarea>
-            <span class="tips"><span>{{comment.length}}</span>/500(评价必须多于10个字)</span>
+            <textarea v-model="comments" minlength="10" maxlength="500"></textarea>
+            <span class="tips"><span>{{comments.length}}</span>/500(评价必须多于10个字)</span>
           </div>
         </div>
         <div class="btn">
-          <span>提交</span>
+          <span @click="treasureAppraisal">提交</span>
         </div>
       </el-dialog>
     </div>
     <div class="footer_wrap">
-      <span class="launch">发起鉴宝</span>
-      <span class="contact">联系卖家</span>
+      <span class="launch" @click="authenticateDialogVisible=true" v-if="assetInfo.appraisal_status===1">一键鉴宝</span>
+      <span class="launch" @click="launchDialogVisible=true" v-else>发起鉴宝</span>
+      <span class="contact" @click="contactDialogVisible=true">联系卖家</span>
+    </div>
+    <div class="tips_wrap">
+      <div class="tips" v-if="tips">{{tipsMessage}}</div>
     </div>
   </div>
 </template>
@@ -198,17 +203,16 @@
         contactDialogVisible: false,
         launchDialogVisible: false,
         authenticateDialogVisible: false,
-        dropDown: false,
-        pullUp: false,
         dayIndex: 1,
         resultIndex: 0,
-        dayRadio: "14天",
-        resultRadio: "真",
+        dayRadio: 14,
+        resultRadio: 1,
         selectTime: ["7天", "14天", "1个月"],
         selectResult: ["真", "假"],
         money: "",
         code: "",
-        comment: "",
+        comments: "",
+        userId: "5c7cfa71df8a8f00012509d9",
         token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjI5OTg5NTksInVzZXJfaWQiOiI1YTZiZTc0YTU1YWFmNTAwMDFhNWUyNTAiLCJkZXZpY2VfaWQiOiJbMjE4IDI0IDI4IDEyOCAxMTIgMTc0IDEwNSA1MyAxOTggMTg5IDExOCA1OSAyMCA2NyAxNjIgMjFdIn0.8rJXVnqIr7DDutYluGTdX6XfnxhWQNhPlUCg1jw5PHQ",
         assetId: "5c774551185c871d94bc81e1",
         assetInfo: {
@@ -220,13 +224,34 @@
         limit: 5,
         total: 1,
         messageList: [],
-        pullUpTips: "加载中...",
-        items: [],
+        codeValue: true,
+        phone: '13911376992',
+        second: 60,
+        sponsorUserId: '',
+        tipsMessage: "",//错误提示信息
+        tips: false,
       }
     },
     created() {
     },
     beforeMount() {
+      /*let url = location.search;
+      if (url.indexOf("?") != -1) {
+        let theRequest = new Object();
+        let str = url.substr(1);
+        let strs = str.split("&");
+        for (let i = 0; i < strs.length; i++) {
+          theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+        }
+        this.userId = theRequest.userId;
+        this.assetId = theRequest.id;
+        this.phone = theRequest.phone;
+        this.token = theRequest.token;
+        this.getAssetDetails();
+        this.getCommentList();
+      }else{
+        this.callTips("请先登录再试")
+      }*/
       this.getAssetDetails();
       this.getCommentList();
     },
@@ -236,18 +261,96 @@
     watch: {},
     computed: {},
     methods: {
+      //发起鉴宝
+      launchTreasureAppraisal() {
+        let data = {};
+        data.user_id = this.userId;
+        data.asset_id = this.assetId;
+        data.duration = this.dayRadio;
+        data.price = this.money;
+        data.paymethod = 1;
+        data.code = this.code;
+        this.$axios({
+          method: 'POST',
+          url: `${this.$baseURL}/v1/appraisal/transaction`,
+          data: this.$querystring.stringify(data),
+          headers: {
+            'X-Access-Token': `${this.token}`
+          }
+        }).then((res) => {
+          this.dayRadio = 14;
+          this.money = "";
+          this.code = "";
+          this.launchDialogVisible=false;
+          this.callTips("成功发起鉴宝")
+        }).catch(error => {
+          this.callTips("服务器忙");
+          console.log(error)
+        })
+      },
+      //鉴宝
+      treasureAppraisal() {
+        let data = {};
+        data.appraiser_user_id = this.userId;
+        data.asset_id = this.assetId;
+        data.sponsor_user_id = this.sponsorUserId;
+        data.result = this.resultRadio;
+        data.comments = this.comments;
+        this.$axios({
+          method: 'POST',
+          url: `${this.$baseURL}/v1/appraisal/evaluation`,
+          data: this.$querystring.stringify(data),
+          headers: {
+            'X-Access-Token': `${this.token}`
+          }
+        }).then((res) => {
+          this.resultRadio = 1;
+          this.comments = "";
+          this.authenticateDialogVisible=false;
+        }).catch(error => {
+          console.log(error)
+        })
+      },
+      //获取短信验证码
+      getPhoneCode() {
+        if (this.phone) {
+          //倒计时
+          this.codeValue = false;
+          let interval = window.setInterval(() => {
+            if ((this.second--) <= 0) {
+              this.codeValue = true;
+              this.second = 60;
+              window.clearInterval(interval);
+            }
+          }, 1000);
+          //请求后端接口获取验证码
+          this.$axios({
+            method: 'post',
+            url: `${this.$baseURL}/v1/sms/code`,
+            data: this.$querystring.stringify({
+              phone: "+86" + this.phone, //手机号
+              type: 5 //1-注册，2-修改密码, 3-登录,5-发起鉴宝
+            })
+          }).then(res => {
+          }).catch(error => {
+            console.log(error);
+          })
+          
+        }
+      },
       //下拉刷新
       refresh(done) {
         setTimeout(() => {
           this.page = 1;
           this.$axios({
             method: 'GET',
-            url: `${this.$baseURL}/v1/appraisal/evaluation?page=${this.page}&limit=${this.limit}`,
+            url: `${this.$baseURL}/v1/appraisal/evaluation/${this.assetId}?page=${this.page}&limit=${this.limit}`,
             headers: {
               'X-Access-Token': `${this.token}`
             }
           }).then(res => {
             this.total = res.data.data.valuation_count;
+            this.sponsorUserId= res.data.data.ponsor_user_id_latest;
             res.data.data.valuation_info.forEach((item) => {
               item.datetime = this.$utils.formatDate(new Date(item.datetime), "yyyy-MM-dd hh:mm:ss");
             });
@@ -265,12 +368,13 @@
           this.page++;
           this.$axios({
             method: 'GET',
-            url: `${this.$baseURL}/v1/appraisal/evaluation?page=${this.page}&limit=${this.limit}`,
+            url: `${this.$baseURL}/v1/appraisal/evaluation/${this.assetId}?page=${this.page}&limit=${this.limit}`,
             headers: {
               'X-Access-Token': `${this.token}`
             }
           }).then(res => {
             this.total = res.data.data.valuation_count;
+            this.sponsorUserId= res.data.data.ponsor_user_id_latest;
             if (this.messageList.length >= this.total) {
               this.$refs.my_scroller.finishInfinite(true);
             } else {
@@ -305,12 +409,13 @@
       getCommentList() {
         this.$axios({
           method: 'GET',
-          url: `${this.$baseURL}/v1/appraisal/evaluation?page=${this.page}&limit=${this.limit}`,
+          url: `${this.$baseURL}/v1/appraisal/evaluation/${this.assetId}?page=${this.page}&limit=${this.limit}`,
           headers: {
             'X-Access-Token': `${this.token}`
           }
         }).then(res => {
           this.total = res.data.data.valuation_count;
+          this.sponsorUserId= res.data.data.ponsor_user_id_latest;
           res.data.data.valuation_info.forEach((item) => {
             item.datetime = this.$utils.formatDate(new Date(item.datetime), "yyyy-MM-dd hh:mm:ss");
           });
@@ -327,6 +432,14 @@
       //切换鉴宝真假结果
       tabChangeResult(index) {
         this.resultIndex = index
+      },
+      //提示信息调用
+      callTips(tipsMessage) {
+        this.tipsMessage = tipsMessage;
+        this.tips = true;
+        window.setTimeout(() => {
+          this.tips = false;
+        }, 2000);
       },
     },
   }
@@ -746,19 +859,21 @@
 <style lang="stylus">
   .detailsPage {
     .scroller {
-      ._v-content{
+      ._v-content {
         padding-bottom 101px
-        .pull-to-refresh-layer{
-          .spinner-holder{
-            .text{
-              font-size 24px!important;/*px*/
+        
+        .pull-to-refresh-layer {
+          .spinner-holder {
+            .text {
+              font-size 24px !important; /*px*/
             }
           }
           
         }
-        .loading-layer{
-          .no-data-text{
-            font-size 24px!important;/*px*/
+        
+        .loading-layer {
+          .no-data-text {
+            font-size 24px !important; /*px*/
           }
         }
       }
@@ -981,10 +1096,11 @@
           }
           
           span:last-child {
+            //margin-top 10px
             display inline-block
             font-size 24px; /*px*/
             color: #ffffff;
-            width 100px
+            min-width 100px
             height 44px
             line-height 44px
             background-color #950101;
@@ -1175,4 +1291,25 @@
       }
     }
   }
+  .tips_wrap {
+    width 100%
+    text-align center
+    font-size 0
+    position fixed
+    top 50%
+    z-index 99999999
+    .tips {
+      display inline-block
+      box-sizing border-box
+      line-height 1.6
+      max-width 520px;
+      padding 20px 30px
+      background-color #000000
+      opacity 0.7
+      font-size 26px; /*px*/
+      color #ffffff
+      border-radius 30px
+    }
+  }
+
 </style>
