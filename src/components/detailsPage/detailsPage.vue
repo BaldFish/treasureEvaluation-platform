@@ -235,7 +235,7 @@
     created() {
     },
     beforeMount() {
-      /*let url = location.search;
+      let url = location.search;
       if (url.indexOf("?") != -1) {
         let theRequest = new Object();
         let str = url.substr(1);
@@ -251,9 +251,7 @@
         this.getCommentList();
       }else{
         this.callTips("请先登录再试")
-      }*/
-      this.getAssetDetails();
-      this.getCommentList();
+      }
     },
     mounted() {
     
