@@ -235,6 +235,8 @@
     created() {
     },
     beforeMount() {
+    },
+    mounted() {
       let url = location.search;
       if (url.indexOf("?") != -1) {
         let theRequest = new Object();
@@ -252,9 +254,6 @@
       }else{
         this.callTips("请先登录再试")
       }
-    },
-    mounted() {
-    
     },
     watch: {},
     computed: {},
