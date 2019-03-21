@@ -325,7 +325,7 @@
             method: 'post',
             url: `${this.$baseURL}/v1/sms/code`,
             data: this.$querystring.stringify({
-              phone: "+86" + this.phone, //手机号
+              phone: this.phone, //手机号
               type: 5 //1-注册，2-修改密码, 3-登录,5-发起鉴宝
             })
           }).then(res => {
