@@ -248,7 +248,7 @@
         let str = url.substr(1);
         let strs = str.split("&");
         for (let i = 0; i < strs.length; i++) {
-          theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+          theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
         }
         this.userId = theRequest.userId;
         this.assetId = theRequest.id;
@@ -290,7 +290,7 @@
           this.callTips("成功发起鉴宝")
         }).catch(error => {
           //this.callTips("服务器忙");
-          console.log(error.data)
+          console.log(error.response)
         })
       },
       //鉴宝
@@ -320,6 +320,7 @@
       getPhoneCode() {
         if (this.phone) {
           //倒计时
+          console.log(this.phone)
           this.codeValue = false;
           let interval = window.setInterval(() => {
             if ((this.second--) <= 0) {
@@ -337,7 +338,6 @@
               type: 5 //1-注册，2-修改密码, 3-登录,5-发起鉴宝
             })
           }).then(res => {
-            console.log(this.phone)
           }).catch(error => {
             console.log(error);
           })
