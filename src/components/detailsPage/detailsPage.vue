@@ -409,9 +409,9 @@
           }
         }).then(res => {
           this.swiperOption.swiperSlides=res.data.data.img;
+          this.sellerPhone=res.data.data.user_phone;
           res.data.data.end_time = this.$utils.formatDate(new Date(res.data.data.end_time), "yyyy-MM-dd hh:mm:ss");
           this.assetInfo = res.data.data;
-          
         }).catch(error => {
           console.log(error)
         })
