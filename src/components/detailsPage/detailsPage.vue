@@ -15,7 +15,7 @@
         </div>
         <div class="result_wrap">
           <div class="price_total clearfix">
-            <div class="price fl">¥<span>17000.00</span></div>
+            <!--<div class="price fl">¥<span>17000.00</span></div>-->
             <div class="total fr">累计鉴宝人数: {{assetInfo.people_count}}个</div>
           </div>
           <div class="title">
@@ -40,9 +40,9 @@
         <div class="intro_wrap">
           <h4 class="intro"><span></span>商品简介</h4>
           <ul class="content">
-            <li class="name"><span>名称：</span><span>{{assetInfo.name}}</span></li>
+            <!--<li class="name"><span>名称：</span><span>{{assetInfo.name}}</span></li>
             <li class="price_year"><span>价格：</span><span>17000.00</span><span>年代：</span><span>{{assetInfo.age}}</span></li>
-            <li class="size"><span>尺寸：</span><span>直径28cm、通高33cm、罐高20cm直径28cm、通高33cm、罐高20cm</span></li>
+            <li class="size"><span>尺寸：</span><span>直径28cm、通高33cm、罐高20cm直径28cm、通高33cm、罐高20cm</span></li>-->
             <li class="description"><span>描述：</span><span>{{assetInfo.desc}}</span></li>
           </ul>
         </div>
@@ -225,7 +225,7 @@
         total: 1,
         messageList: [],
         codeValue: true,
-        phone: '13911376992',
+        phone: '12345678901',
         second: 60,
         sponsorUserId: '',
         tipsMessage: "",//错误提示信息
@@ -237,7 +237,7 @@
     beforeMount() {
     },
     mounted() {
-      let url = location.search;
+      /*let url = location.search;
       if (url.indexOf("?") != -1) {
         let theRequest = new Object();
         let str = url.substr(1);
@@ -253,7 +253,9 @@
         this.getCommentList();
       }else{
         this.callTips("请先登录再试")
-      }
+      }*/
+      this.getAssetDetails();
+      this.getCommentList();
     },
     watch: {},
     computed: {},
@@ -281,7 +283,7 @@
           this.launchDialogVisible=false;
           this.callTips("成功发起鉴宝")
         }).catch(error => {
-          this.callTips("服务器忙");
+          //this.callTips("服务器忙");
           console.log(error)
         })
       },
