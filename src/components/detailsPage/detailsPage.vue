@@ -289,7 +289,7 @@
           this.callTips("成功发起鉴宝")
         }).catch(error => {
           //this.callTips("服务器忙");
-          console.log(error)
+          console.log(error.message)
         })
       },
       //鉴宝
