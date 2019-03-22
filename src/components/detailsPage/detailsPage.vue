@@ -102,10 +102,10 @@
         width="76%"
         center>
         <h4>联系卖家</h4>
-        <p>18787627373</p>
+        <p>{{sellerPhone}}</p>
         <div class="btn">
           <span @click="contactDialogVisible=false">取消</span>
-          <a href="tel:18787627373" @click="contactDialogVisible=false"><span>呼叫</span></a>
+          <a @click="contactSeller"><span>呼叫</span></a>
         </div>
       </el-dialog>
     </div>
@@ -230,6 +230,7 @@
         tipsMessage: "",//错误提示信息
         tips: false,
         transId: "",
+        sellerPhone:"12345678901",
       }
     },
     created() {
@@ -258,6 +259,11 @@
     watch: {},
     computed: {},
     methods: {
+      //联系卖家
+      contactSeller(){
+        this.contactDialogVisible=false;
+        window.lrBridgeJS.awakenDial(this.sellerPhone)
+      },
       //发起鉴宝
       launchTreasureAppraisal() {
         let data = {};
