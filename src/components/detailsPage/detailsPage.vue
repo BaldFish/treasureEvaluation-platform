@@ -248,7 +248,7 @@
         let str = url.substr(1);
         let strs = str.split("&");
         for (let i = 0; i < strs.length; i++) {
-          theRequest[strs[i].split("=")[0]] = '+'+decodeURI(strs[i].split("=")[1]).substr(1);
+          theRequest[strs[i].split("=")[0]] = '+'+unescape(strs[i].split("=")[1]).substr(1);
         }
         this.userId = theRequest.userId;
         this.assetId = theRequest.id;
