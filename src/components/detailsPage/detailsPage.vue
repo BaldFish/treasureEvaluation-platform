@@ -7,10 +7,10 @@
       <div class="list_wrap">
         <div class="swiper_wrap">
           <swiper :options="swiperOption" class="awesome_swiper" ref="swiperOption">
-            <swiper-slide v-for="(slide, index) in assetInfo.img" :key="index" v-if="assetInfo.img.length">
+            <swiper-slide v-for="(slide, index) in swiperOption.swiperSlides" :key="index" v-if="swiperOption.swiperSlides.length">
               <img :src="slide" alt="">
             </swiper-slide>
-            <div class="swiper-pagination" slot="pagination" v-if="assetInfo.img.length>1"></div>
+            <div class="swiper-pagination" slot="pagination" v-if="swiperOption.swiperSlides.length>1"></div>
           </swiper>
         </div>
         <div class="result_wrap">
@@ -189,14 +189,15 @@
     data() {
       return {
         swiperOption: {
+          pagination: {
+            el: '.swiper-pagination'
+          },
+          swiperSlides: [1, 2, 3, 4, 5],
           autoplay: {
             delay: 3000,
             stopOnLastSlide: false,
             disableOnInteraction: false,
             loop: true,
-          },
-          pagination: {
-            el: '.swiper-pagination'
           },
         },
         contactDialogVisible: false,
@@ -213,15 +214,9 @@
         comments: "",
         userId: "",
         token: "",
-        assetId: "5c774551185c871d94bc81e1",
+        assetId: "",
         phone: '',
-        /*userId: "5c7cfa71df8a8f00012509d9",
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjI5OTg5NTksInVzZXJfaWQiOiI1YTZiZTc0YTU1YWFmNTAwMDFhNWUyNTAiLCJkZXZpY2VfaWQiOiJbMjE4IDI0IDI4IDEyOCAxMTIgMTc0IDEwNSA1MyAxOTggMTg5IDExOCA1OSAyMCA2NyAxNjIgMjFdIn0.8rJXVnqIr7DDutYluGTdX6XfnxhWQNhPlUCg1jw5PHQ",
-        assetId: "5c774551185c871d94bc81e1",
-        phone: '12345678901',*/
-        
         assetInfo: {
-          img: [],
           result: 0,
         },
         login: true,
@@ -234,6 +229,7 @@
         sponsorUserId: '',
         tipsMessage: "",//错误提示信息
         tips: false,
+        transId: "",
       }
     },
     created() {
@@ -251,15 +247,13 @@
         }
         this.userId = theRequest.userId;
         this.assetId = theRequest.id;
-        this.phone = '+'+theRequest.phone.substr(1);
+        this.phone = '+' + theRequest.phone.substr(1);
         this.token = theRequest.token;
         this.getAssetDetails();
         this.getCommentList();
-      }else{
+      } else {
         this.callTips("请先登录再试")
       }
-      /*this.getAssetDetails();
-      this.getCommentList();*/
     },
     watch: {},
     computed: {},
@@ -273,7 +267,6 @@
         data.price = this.money;
         data.paymethod = 1;
         data.code = this.code;
-        console.log(data);
         this.$axios({
           method: 'POST',
           url: `${this.$baseURL}/v1/appraisal/transaction`,
@@ -285,8 +278,9 @@
           this.dayRadio = 14;
           this.money = "";
           this.code = "";
-          this.launchDialogVisible=false;
-          this.callTips("成功发起鉴宝")
+          this.launchDialogVisible = false;
+          this.callTips("成功发起鉴宝");
+          window.location.href = window.location.href
         }).catch(error => {
           this.callTips(error.response.data.message);
           console.log(error)
@@ -300,6 +294,7 @@
         data.sponsor_user_id = this.sponsorUserId;
         data.result = this.resultRadio;
         data.comments = this.comments;
+        data.trans_id = this.transId;
         this.$axios({
           method: 'POST',
           url: `${this.$baseURL}/v1/appraisal/evaluation`,
@@ -310,9 +305,10 @@
         }).then((res) => {
           this.resultRadio = 1;
           this.comments = "";
-          this.authenticateDialogVisible=false;
+          this.authenticateDialogVisible = false;
+          window.location.href = window.location.href
         }).catch(error => {
-          this.callTips(error.response.data.message)
+          this.callTips(error.response.data.message);
           console.log(error)
         })
       },
@@ -355,7 +351,8 @@
             }
           }).then(res => {
             this.total = res.data.data.valuation_count;
-            this.sponsorUserId= res.data.data.sponsor_user_id_latest;
+            this.sponsorUserId = res.data.data.sponsor_user_id_latest;
+            this.transId = res.data.data.trans_id;
             res.data.data.valuation_info.forEach((item) => {
               item.datetime = this.$utils.formatDate(new Date(item.datetime), "yyyy-MM-dd hh:mm:ss");
             });
@@ -379,7 +376,8 @@
             }
           }).then(res => {
             this.total = res.data.data.valuation_count;
-            this.sponsorUserId= res.data.data.sponsor_user_id_latest;
+            this.sponsorUserId = res.data.data.sponsor_user_id_latest;
+            this.transId = res.data.data.trans_id;
             if (this.messageList.length >= this.total) {
               this.$refs.my_scroller.finishInfinite(true);
             } else {
@@ -404,8 +402,10 @@
             'X-Access-Token': `${this.token}`
           }
         }).then(res => {
+          this.swiperOption.swiperSlides=res.data.data.img;
           res.data.data.end_time = this.$utils.formatDate(new Date(res.data.data.end_time), "yyyy-MM-dd hh:mm:ss");
           this.assetInfo = res.data.data;
+          
         }).catch(error => {
           console.log(error)
         })
@@ -420,7 +420,8 @@
           }
         }).then(res => {
           this.total = res.data.data.valuation_count;
-          this.sponsorUserId= res.data.data.sponsor_user_id_latest;
+          this.sponsorUserId = res.data.data.sponsor_user_id_latest;
+          this.transId = res.data.data.trans_id;
           res.data.data.valuation_info.forEach((item) => {
             item.datetime = this.$utils.formatDate(new Date(item.datetime), "yyyy-MM-dd hh:mm:ss");
           });
@@ -1296,6 +1297,7 @@
       }
     }
   }
+  
   .tips_wrap {
     width 100%
     text-align center
@@ -1303,6 +1305,7 @@
     position fixed
     top 50%
     z-index 99999999
+    
     .tips {
       display inline-block
       box-sizing border-box
