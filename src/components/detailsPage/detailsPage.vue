@@ -313,6 +313,7 @@
           this.comments = "";
           this.authenticateDialogVisible=false;
         }).catch(error => {
+          this.callTips(error.response.data.message)
           console.log(error)
         })
       },
