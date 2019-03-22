@@ -274,6 +274,7 @@
         data.price = this.money;
         data.paymethod = 1;
         data.code = this.code;
+        console.log(data);
         this.$axios({
           method: 'POST',
           url: `${this.$baseURL}/v1/appraisal/transaction`,
