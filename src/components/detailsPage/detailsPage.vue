@@ -189,7 +189,6 @@
     data() {
       return {
         swiperOption: {
-          loop: true,
           autoplay: {
             delay: 3000,
             stopOnLastSlide: false,
