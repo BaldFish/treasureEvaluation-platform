@@ -355,7 +355,7 @@
             }
           }).then(res => {
             this.total = res.data.data.valuation_count;
-            this.sponsorUserId= res.data.data.ponsor_user_id_latest;
+            this.sponsorUserId= res.data.data.sponsor_user_id_latest;
             res.data.data.valuation_info.forEach((item) => {
               item.datetime = this.$utils.formatDate(new Date(item.datetime), "yyyy-MM-dd hh:mm:ss");
             });
@@ -379,7 +379,7 @@
             }
           }).then(res => {
             this.total = res.data.data.valuation_count;
-            this.sponsorUserId= res.data.data.ponsor_user_id_latest;
+            this.sponsorUserId= res.data.data.sponsor_user_id_latest;
             if (this.messageList.length >= this.total) {
               this.$refs.my_scroller.finishInfinite(true);
             } else {
