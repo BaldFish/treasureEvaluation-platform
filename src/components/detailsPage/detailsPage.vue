@@ -59,7 +59,7 @@
           <div class="underway" v-else-if="login&&assetInfo.appraisal_status!==0">
             <ul>
               <li class="name"><span>名称：</span><span>{{assetInfo.name}}</span></li>
-              <li class="price_year"><span>悬赏版通金额：</span><span>{{assetInfo.price}}</span><span>年代：</span><span>{{assetInfo.age}}</span></li>
+              <li class="price_year"><span>悬赏版通金额：</span><span>{{assetInfo.price}}</span><!--<span>年代：</span><span>{{assetInfo.age}}</span>--></li>
               <li class="time"><span>鉴宝结束时间：</span><span>{{assetInfo.end_time}}</span></li>
               <li class="remark"><p>*注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p></li>
             </ul>
@@ -212,9 +212,15 @@
         money: "",
         code: "",
         comments: "",
-        userId: "5c7cfa71df8a8f00012509d9",
+        userId: "",
+        token: "",
+        assetId: "5c774551185c871d94bc81e1",
+        phone: '',
+        /*userId: "5c7cfa71df8a8f00012509d9",
         token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NjI5OTg5NTksInVzZXJfaWQiOiI1YTZiZTc0YTU1YWFmNTAwMDFhNWUyNTAiLCJkZXZpY2VfaWQiOiJbMjE4IDI0IDI4IDEyOCAxMTIgMTc0IDEwNSA1MyAxOTggMTg5IDExOCA1OSAyMCA2NyAxNjIgMjFdIn0.8rJXVnqIr7DDutYluGTdX6XfnxhWQNhPlUCg1jw5PHQ",
         assetId: "5c774551185c871d94bc81e1",
+        phone: '12345678901',*/
+        
         assetInfo: {
           img: [],
           result: 0,
@@ -225,7 +231,6 @@
         total: 1,
         messageList: [],
         codeValue: true,
-        phone: '12345678901',
         second: 60,
         sponsorUserId: '',
         tipsMessage: "",//错误提示信息
@@ -237,7 +242,7 @@
     beforeMount() {
     },
     mounted() {
-      /*let url = location.search;
+      let url = location.search;
       if (url.indexOf("?") != -1) {
         let theRequest = new Object();
         let str = url.substr(1);
@@ -253,9 +258,9 @@
         this.getCommentList();
       }else{
         this.callTips("请先登录再试")
-      }*/
-      this.getAssetDetails();
-      this.getCommentList();
+      }
+      /*this.getAssetDetails();
+      this.getCommentList();*/
     },
     watch: {},
     computed: {},
