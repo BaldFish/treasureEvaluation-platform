@@ -192,7 +192,7 @@
           pagination: {
             el: '.swiper-pagination'
           },
-          swiperSlides: [1, 2, 3, 4, 5],
+          swiperSlides: [],
           autoplay: {
             delay: 3000,
             stopOnLastSlide: false,
@@ -804,7 +804,8 @@
             .verdict {
               p {
                 font-size: 24px; /*px*/
-                min-height 200px
+                line-height 28px
+                min-height 28px
               }
             }
           }
