@@ -30,6 +30,9 @@
             </div>
             <div class="img_false"><img src="@/common/images/false1.png" alt="假"></div>
           </div>
+          <div class="click_pay">
+            <span>点击支付</span>10个版通可查看累计鉴宝结果
+          </div>
         </div>
         <div class="line20"></div>
         <div class="num">
@@ -45,6 +48,19 @@
             <li class="size"><span>尺寸：</span><span>直径28cm、通高33cm、罐高20cm直径28cm、通高33cm、罐高20cm</span></li>-->
             <li class="description"><span>描述：</span><span>{{assetInfo.desc}}</span></li>
           </ul>
+        </div>
+        <div class="line20"></div>
+        <div class="game_wrap">
+          <h4 class="game"><span></span>鉴宝游戏</h4>
+          <div class="no_launch">
+            <div class="img_wrap">
+              <img src="../../common/images/zanwu.png" alt="">
+            </div>
+            <p>暂未有用户发起鉴宝</p>
+          </div>
+          <div class="launch">
+          <p class="rule"><span><img src="../../common/images/guize.png" alt=""></span>规则：本轮鉴宝结束后，超过50%的一方平分版通；</p>
+          </div>
         </div>
         <div class="line20"></div>
         <div class="message_wrap">
@@ -230,7 +246,7 @@
         tipsMessage: "",//错误提示信息
         tips: false,
         transId: "",
-        sellerPhone:"12345678901",
+        sellerPhone: "12345678901",
       }
     },
     created() {
@@ -260,8 +276,8 @@
     computed: {},
     methods: {
       //联系卖家
-      contactSeller(){
-        this.contactDialogVisible=false;
+      contactSeller() {
+        this.contactDialogVisible = false;
         window.lrBridgeJS.awakenDial(this.sellerPhone)
       },
       //发起鉴宝
@@ -408,8 +424,8 @@
             'X-Access-Token': `${this.token}`
           }
         }).then(res => {
-          this.swiperOption.swiperSlides=res.data.data.img;
-          this.sellerPhone=res.data.data.user_phone;
+          this.swiperOption.swiperSlides = res.data.data.img;
+          this.sellerPhone = res.data.data.user_phone;
           res.data.data.end_time = this.$utils.formatDate(new Date(res.data.data.end_time), "yyyy-MM-dd hh:mm:ss");
           this.assetInfo = res.data.data;
         }).catch(error => {
@@ -468,11 +484,12 @@
     
     .list_wrap {
       .result_wrap {
-        padding 0 25px 40px
+        
         
         .price_total {
           font-size 0
           padding-top 30px
+          padding-right 25px
           
           .price {
             color: #ac0101;
@@ -496,7 +513,7 @@
         
         .title {
           padding-top 44px
-          
+          padding-left 25px
           h3 {
             font-size: 36px; /*px*/
             color: #333333;
@@ -508,7 +525,7 @@
           font-size 0
           margin-top 48px
           text-align center
-          
+          padding-bottom 40px
           .img_true {
             display inline-block
             vertical-align middle
@@ -558,6 +575,19 @@
               width 100%
               height 100%
             }
+          }
+        }
+        .click_pay{
+          margin-top 48px
+          height: 100px;
+          line-height 100px
+          background-color: #f6f6f6;
+          text-align center
+          font-size: 28px;/*px*/
+          color: #333333;
+          span{
+            font-size: 32px;/*px*/
+            color: #871a11;
           }
         }
       }
@@ -640,6 +670,44 @@
         }
       }
       
+      .game_wrap {
+        padding 45px 25px 80px
+    
+        .game {
+          font-size: 32px; /*px*/
+          color: #333333;
+          font-weight bold
+      
+          span {
+            display inline-block
+            width 6px
+            height 32px
+            background-color: #950101;
+            vertical-align top
+            margin-right 16px
+          }
+        }
+    
+        .no_launch{
+          padding-top 60px
+          .img_wrap{
+            width 191px
+            height 192px
+            margin 0 auto
+            img{
+              width 100%
+              height 100%
+            }
+          }
+          p{
+            margin-top 30px
+            font-size: 22px;/*px*/
+            color: #333333;
+            text-align center
+          }
+        }
+      }
+  
       .message_wrap {
         padding 45px 25px 0
         
