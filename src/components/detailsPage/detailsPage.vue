@@ -52,14 +52,43 @@
         <div class="line20"></div>
         <div class="game_wrap">
           <h4 class="game"><span></span>鉴宝游戏</h4>
-          <div class="no_launch">
+          <!--<div class="no_launch">
             <div class="img_wrap">
               <img src="../../common/images/zanwu.png" alt="">
             </div>
             <p>暂未有用户发起鉴宝</p>
-          </div>
-          <div class="launch">
-          <p class="rule"><span><img src="../../common/images/guize.png" alt=""></span>规则：本轮鉴宝结束后，超过50%的一方平分版通；</p>
+          </div>-->
+          <div class="game_launch">
+            <p class="rule"><span><img src="../../common/images/guize.png" alt=""></span><span>规则：本轮鉴宝结束后，超过50%的一方平分版通；</span></p>
+            <div class="info_wrap underway_wrap">
+              <ul>
+                <li>发起账号：<span>1723876234</span></li>
+                <li>悬赏版通金额：<span>230.00</span></li>
+                <li>本轮倒计时：<span>5天22小时21分23秒</span></li>
+                <li>本轮已参与人数：<span>8人</span></li>
+              </ul>
+              <div class="underway_p">
+                <div class="img_wrap">
+                  <img src="../../common/images/underway.png" alt="">
+                </div>
+              </div>
+            </div>
+            <div class="info_wrap finish_wrap">
+              <ul>
+                <li>发起账号：<span>1723876234</span></li>
+                <li>悬赏版通金额：<span>230.00</span></li>
+                <li>发起鉴宝：<span>2019.04.11. 21:12:11</span></li>
+                <li>鉴宝期限：<span>7天</span></li>
+                <li>本轮已参与人数：<span>8人</span></li>
+              </ul>
+              <div class="hide_p">
+                <div class="img_wrap">
+                  <img src="../../common/images/hide.png" alt="">
+                </div>
+                <p><a href="">点击支付</a> 10个版通</p>
+                <p>可查看本轮鉴宝留言</p>
+              </div>
+            </div>
           </div>
         </div>
         <div class="line20"></div>
@@ -113,10 +142,10 @@
     </scroller>
     <div class="dialog_contact">
       <el-dialog
-        title="提示"
-        :visible.sync="contactDialogVisible"
-        width="76%"
-        center>
+          title="提示"
+          :visible.sync="contactDialogVisible"
+          width="76%"
+          center>
         <h4>联系卖家</h4>
         <p>{{sellerPhone}}</p>
         <div class="btn">
@@ -127,10 +156,10 @@
     </div>
     <div class="dialog_launch">
       <el-dialog
-        title="提示"
-        :visible.sync="launchDialogVisible"
-        width="76%"
-        center>
+          title="提示"
+          :visible.sync="launchDialogVisible"
+          width="76%"
+          center>
         <h4>发起鉴宝</h4>
         <div class="select_time">
           <span class="til">鉴宝时间：</span>
@@ -162,10 +191,10 @@
     </div>
     <div class="dialog_authenticate">
       <el-dialog
-        title="提示"
-        :visible.sync="authenticateDialogVisible"
-        width="76%"
-        center>
+          title="提示"
+          :visible.sync="authenticateDialogVisible"
+          width="76%"
+          center>
         <h4>鉴宝</h4>
         <div class="select_result">
           <span class="til">鉴宝结果：</span>
@@ -484,8 +513,6 @@
     
     .list_wrap {
       .result_wrap {
-        
-        
         .price_total {
           font-size 0
           padding-top 30px
@@ -514,6 +541,7 @@
         .title {
           padding-top 44px
           padding-left 25px
+          
           h3 {
             font-size: 36px; /*px*/
             color: #333333;
@@ -526,6 +554,7 @@
           margin-top 48px
           text-align center
           padding-bottom 40px
+          
           .img_true {
             display inline-block
             vertical-align middle
@@ -536,7 +565,6 @@
               width 100%
               height 100%
             }
-            
           }
           
           .percentage_box {
@@ -577,16 +605,18 @@
             }
           }
         }
-        .click_pay{
+        
+        .click_pay {
           margin-top 48px
           height: 100px;
           line-height 100px
           background-color: #f6f6f6;
           text-align center
-          font-size: 28px;/*px*/
+          font-size: 28px; /*px*/
           color: #333333;
-          span{
-            font-size: 32px;/*px*/
+          
+          span {
+            font-size: 32px; /*px*/
             color: #871a11;
           }
         }
@@ -671,13 +701,13 @@
       }
       
       .game_wrap {
-        padding 45px 25px 80px
-    
+        padding 45px 25px 30px
+        
         .game {
           font-size: 32px; /*px*/
           color: #333333;
           font-weight bold
-      
+          
           span {
             display inline-block
             width 6px
@@ -687,27 +717,70 @@
             margin-right 16px
           }
         }
-    
-        .no_launch{
+        
+        .no_launch {
           padding-top 60px
-          .img_wrap{
+          padding-bottom 50px
+          
+          .img_wrap {
             width 191px
             height 192px
             margin 0 auto
-            img{
+            
+            img {
               width 100%
               height 100%
             }
           }
-          p{
+          
+          p {
             margin-top 30px
-            font-size: 22px;/*px*/
+            font-size: 22px; /*px*/
             color: #333333;
             text-align center
           }
         }
+        
+        .game_launch {
+          .rule {
+            font-size 0
+            margin-top 34px
+            span:first-child {
+              display inline-block
+              width 35px
+              height 35px
+              vertical-align middle
+              margin-right 15px
+              
+              img {
+                width 100%
+                height 100%
+              }
+            }
+            
+            span:last-child {
+              display inline-block
+              font-size: 24px; /*px*/
+              color: #333333;
+              vertical-align middle
+            }
+          }
+          
+          .info_wrap {
+            position relative
+            padding-top 32px
+            border-top 3px solid #f6f6f6;/*px*/
+          }
+          .info_wrap:first-child{
+          }
+          .underway_wrap {
+          }
+          
+          .finish_wrap {
+          }
+        }
       }
-  
+      
       .message_wrap {
         padding 45px 25px 0
         
