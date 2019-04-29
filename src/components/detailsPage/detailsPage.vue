@@ -64,7 +64,7 @@
               <ul>
                 <li>发起账号：<span>1723876234</span></li>
                 <li>悬赏版通金额：<span>230.00</span></li>
-                <li>本轮倒计时：<span>5天22小时21分23秒</span></li>
+                <li>本轮倒计时：<span style="color: #871a11">5天22小时21分23秒</span></li>
                 <li>本轮已参与人数：<span>8人</span></li>
               </ul>
               <div class="underway_p">
@@ -81,12 +81,21 @@
                 <li>鉴宝期限：<span>7天</span></li>
                 <li>本轮已参与人数：<span>8人</span></li>
               </ul>
-              <div class="hide_p">
+              <!--<div class="hide_p">
                 <div class="img_wrap">
                   <img src="../../common/images/hide.png" alt="">
                 </div>
-                <p><a href="">点击支付</a> 10个版通</p>
+                <p><a href="javascript:void(0)">点击支付</a> 10个版通</p>
                 <p>可查看本轮鉴宝留言</p>
+              </div>-->
+              <div class="finish_p">
+                <div class="img_wrap">
+                  <img src="../../common/images/finish.png" alt="">
+                </div>
+                <div class="result_img">
+                  <img src="../../common/images/false3.png" alt="">
+                </div>
+                <p class="result_text">80%</p>
               </div>
             </div>
           </div>
@@ -102,19 +111,23 @@
             <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
           </div>
           <div class="underway" v-else-if="login&&assetInfo.appraisal_status!==0">
-            <ul>
+            <div class="hide_p">
+                <div class="img_wrap">
+                  <img src="../../common/images/hide.png" alt="">
+                </div>
+                <p><a href="javascript:void(0)">点击支付</a> 10个版通</p>
+                <p>可查看本轮鉴宝留言</p>
+              </div>
+            <!--<ul>
               <li class="name"><span>名称：</span><span>{{assetInfo.name}}</span></li>
-              <li class="price_year"><span>悬赏版通金额：</span><span>{{assetInfo.price}}</span><!--<span>年代：</span><span>{{assetInfo.age}}</span>--></li>
+              <li class="price_year"><span>悬赏版通金额：</span><span>{{assetInfo.price}}</span>&lt;!&ndash;<span>年代：</span><span>{{assetInfo.age}}</span>&ndash;&gt;</li>
               <li class="time"><span>鉴宝结束时间：</span><span>{{assetInfo.end_time}}</span></li>
               <li class="remark"><p>*注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p></li>
-            </ul>
-          </div>
-          <div class="waiting" v-else>
-            <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
+            </ul>-->
           </div>
         </div>
         <div class="list" v-for="(item,index) of messageList" :key="index">
-          <div class="line10"></div>
+          <div class="line10" v-if="messageList>1"></div>
           <div class="list_content">
             <ul>
               <li class="phone_identity">
@@ -189,6 +202,29 @@
         </div>
       </el-dialog>
     </div>
+    <div class="dialog_pay">
+      <el-dialog
+          title="提示"
+          :visible.sync="payDialogVisible"
+          width="76%"
+          center>
+        <h4>支付</h4>
+        <div class="price">¥<span>10077</span></div>
+        <div class="currency">板通</div>
+        <div class="send">
+          <span v-cloak>请输入尾号 <i>{{this.phone.substr(-4)}}</i> 短信验证码</span>
+          <span v-if="codeValue" @click="getPhoneCode">发送</span>
+          <span v-else style="background-color: #7d7d7d;color: #ffffff;">倒计时（{{second}}）</span>
+        </div>
+        
+        <div class="code">
+          <input type="text" v-model="code" placeholder="请输入短信验证码">
+        </div>
+        <div class="btn">
+          <span @click="launchTreasureAppraisal">确定</span>
+        </div>
+      </el-dialog>
+    </div>
     <div class="dialog_authenticate">
       <el-dialog
           title="提示"
@@ -247,6 +283,7 @@
         },
         contactDialogVisible: false,
         launchDialogVisible: false,
+        payDialogVisible: true,
         authenticateDialogVisible: false,
         dayIndex: 1,
         resultIndex: 0,
@@ -268,7 +305,20 @@
         page: 1,
         limit: 5,
         total: 1,
-        messageList: [],
+        messageList: [
+          {   "id":"5be4eef10aff7e0001a3f83a", // 主键id
+            "sponsor_user_id":"xxxx",// 发起人人userID
+            "appraiser_user_id":"xxxx",// 鉴定人userID
+            "asset_id":"xxx", // 资产id
+            "appraiser_phone":"133****6836", // 鉴定人手机号
+            "auth_status":"未认证", // 认证状态
+            "datetime":"2019-2-30 14:14:32", // 鉴定时间
+            "appraisal_count":34, // 累计鉴定次数
+            "sponsor_phone":"133****6836",// 鉴定发起人
+            "comments":"Lorem ipsum dolor sit amet", // 评论
+            "result":1  //1-真  2-假
+    }
+    ],
         codeValue: true,
         second: 60,
         sponsorUserId: '',
@@ -745,6 +795,7 @@
           .rule {
             font-size 0
             margin-top 34px
+            
             span:first-child {
               display inline-block
               width 35px
@@ -768,11 +819,109 @@
           
           .info_wrap {
             position relative
-            padding-top 32px
-            border-top 3px solid #f6f6f6;/*px*/
+            padding-top 19px
+            padding-bottom 17px
+            border-top 3px solid #f6f6f6; /*px*/
+            
+            ul {
+              li {
+                line-height 50px
+                font-size: 22px; /*px*/
+                color: #999999;
+                
+                span {
+                  font-size: 24px; /*px*/
+                  color: #333333;
+                }
+              }
+            }
+            
+            .underway_p {
+              position absolute
+              top 32px
+              right 37px
+              
+              .img_wrap {
+                width 127px
+                height 78px
+                
+                img {
+                  width 100%
+                  height 100%
+                }
+              }
+            }
+            
+            .hide_p {
+              position absolute
+              top 32px
+              right 37px
+              text-align center
+              
+              .img_wrap {
+                width 131px
+                height 123px
+                margin 0 auto
+                
+                img {
+                  width 100%
+                  height 100%
+                }
+              }
+              
+              p:nth-child(2) {
+                font-size: 22px; /*px*/
+                color: #333333;
+                line-height 52px
+                a {
+                  font-size: 28px; /*px*/
+                  color: #871a11;
+                }
+              }
+              
+              p:last-child {
+                font-size: 20px; /*px*/
+                color: #333333;
+                line-height 52px
+              }
+            }
+            .finish_p{
+              position absolute
+              top 32px
+              right 37px
+  
+              .img_wrap {
+                width 127px
+                height 78px
+    
+                img {
+                  width 100%
+                  height 100%
+                }
+              }
+              .result_img{
+                width 60px
+                height 61px
+                margin 0 auto
+                margin-top 25px
+                img{
+                  width 100%
+                  height 100%
+                }
+              }
+              .result_text{
+                text-align center
+                font-size: 28px;/*px*/
+                color: #333333;
+                line-height 56px
+              }
+            }
           }
-          .info_wrap:first-child{
+          
+          .info_wrap:nth-of-type(1) {
+            border-top none
           }
+          
           .underway_wrap {
           }
           
@@ -831,7 +980,36 @@
           url("../../common/images/right.png") no-repeat right bottom
           padding 30px
           background-color #f6f6f6
-          
+          .hide_p {
+            text-align center
+    
+            .img_wrap {
+              width 131px
+              height 123px
+              margin 0 auto
+      
+              img {
+                width 100%
+                height 100%
+              }
+            }
+    
+            p:nth-child(2) {
+              font-size: 34px; /*px*/
+              color: #333333;
+              line-height 52px
+              a {
+                font-size: 34px; /*px*/
+                color: #871a11;
+              }
+            }
+    
+            p:last-child {
+              font-size: 22px; /*px*/
+              color: #333333;
+              line-height 52px
+            }
+          }
           li {
             font-size 0
             margin-top 24px
@@ -978,7 +1156,7 @@
           }
         }
       }
-      
+
     }
     
     .footer_wrap {
@@ -1319,6 +1497,111 @@
     }
   }
   
+  .dialog_pay {
+    .el-dialog {
+      margin-top 28vh !important
+    
+      .el-dialog__header {
+        display none
+      }
+    
+      .el-dialog__body {
+        padding 0
+        padding-top 15px
+        font-size 0
+      
+        h4 {
+          width 466px
+          height 61px
+          margin 0 auto
+          text-align center
+          line-height 61px
+          font-size: 36px; /*px*/
+          color: #333333;
+          background-image: url(../../common/images/border1.png);
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
+          -moz-background-size: 100% 100%;
+        
+        }
+        
+        .price{
+          font-size: 40px;/*px*/
+          color: #a40000;
+          text-align center
+          span{
+            font-size: 70px;/*px*/
+          }
+        }
+        .currency {
+          font-size: 24px;/*px*/
+          color: #333333;
+          margin-top 26px
+          text-align center
+        }
+  
+        .send {
+          margin-top 32px
+          font-size 0
+          text-align center
+        
+          span:first-child {
+            display inline-block
+            font-size 22px; /*px*/
+            color: #999999;
+            i{
+              font-style:normal
+              color: #333333;
+            }
+          }
+        
+          span:last-child {
+            display inline-block
+            font-size 22px; /*px*/
+            color: #666666;
+            min-width 100px
+            height 44px
+            line-height 44px
+            padding-left 5px
+            margin-left 12px
+            border-radius: 20px;
+            border: solid 1px #e5e5e5;/*px*/
+          }
+        }
+        
+        .code {
+          text-align center
+        
+          input {
+            padding-left 25px
+            width 490px
+            height 50px
+            font-size 20px; /*px*/
+            margin-top 24px
+            margin-bottom 48px
+            color #999999
+            border: solid 1px #bfbfbf;
+          }
+        }
+      
+        .btn {
+          box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
+        
+          span {
+            width 570px
+            height 80px
+            line-height 80px
+            text-align center
+            display inline-block
+            font-size: 36px; /*px*/
+            background-color #950101;
+            color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+
   .dialog_authenticate {
     .el-dialog {
       margin-top 28vh !important
