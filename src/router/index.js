@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import myHome from '@/components/home/home'
 import myLogin from '@/components/login/login'
 import myDetailsPage from '@/components/detailsPage/detailsPage'
-import myScroll from '@/components/detailsPage/RefreshAndInfinite'
 Vue.use(Router);
 
 export default new Router({
@@ -28,11 +27,6 @@ export default new Router({
       name:'detailsPage',
       component:myDetailsPage
     },
-    {
-      path:'/scroll',
-      name:'scroll',
-      component:myScroll
-    }
   ]
 })
 

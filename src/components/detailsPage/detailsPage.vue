@@ -3,6 +3,7 @@
     <scroller class="scroller"
               :on-refresh="refresh"
               :on-infinite="infinite"
+              :noDataText="a"
               ref="my_scroller">
       <div class="list_wrap">
         <div class="swiper_wrap">
@@ -21,7 +22,7 @@
           <div class="title">
             <h3>{{assetInfo.name}}</h3>
           </div>
-          <div class="result">
+          <div class="result" v-if="assetInfo.visible">
             <div class="img_true"><img src="@/common/images/true1.png" alt="真"></div>
             <div class="percentage_box">
               <span class="true">{{assetInfo.result}}%</span>
@@ -30,7 +31,7 @@
             </div>
             <div class="img_false"><img src="@/common/images/false1.png" alt="假"></div>
           </div>
-          <div class="click_pay">
+          <div class="click_pay" v-else>
             <span>点击支付</span>10个版通可查看累计鉴宝结果
           </div>
         </div>
@@ -44,8 +45,8 @@
           <h4 class="intro"><span></span>商品简介</h4>
           <ul class="content">
             <!--<li class="name"><span>名称：</span><span>{{assetInfo.name}}</span></li>
-            <li class="price_year"><span>价格：</span><span>17000.00</span><span>年代：</span><span>{{assetInfo.age}}</span></li>
-            <li class="size"><span>尺寸：</span><span>直径28cm、通高33cm、罐高20cm直径28cm、通高33cm、罐高20cm</span></li>-->
+            <li class="price_year"><span>价格：</span><span>{{assetInfo.price}}</span><span>年代：</span><span>{{assetInfo.age}}</span></li>-->
+            <!--<li class="size"><span>尺寸：</span><span>直径28cm、通高33cm、罐高20cm直径28cm、通高33cm、罐高20cm</span></li>-->
             <li class="description"><span>描述：</span><span>{{assetInfo.desc}}</span></li>
           </ul>
         </div>
@@ -60,12 +61,12 @@
           </div>-->
           <div class="game_launch">
             <p class="rule"><span><img src="../../common/images/guize.png" alt=""></span><span>规则：本轮鉴宝结束后，超过50%的一方平分版通；</span></p>
-            <div class="info_wrap underway_wrap">
+            <div class="info_wrap underway_wrap" v-if="underway.status===1">
               <ul>
-                <li>发起账号：<span>1723876234</span></li>
-                <li>悬赏版通金额：<span>230.00</span></li>
+                <li>发起账号：<span>{{underway.sponsor_phone}}</span></li>
+                <li>悬赏版通金额：<span>{{underway.price}}</span></li>
                 <li>本轮倒计时：<span style="color: #871a11">5天22小时21分23秒</span></li>
-                <li>本轮已参与人数：<span>8人</span></li>
+                <li>本轮已参与人数：<span>{{underway.appraisal_count}}人</span></li>
               </ul>
               <div class="underway_p">
                 <div class="img_wrap">
@@ -73,22 +74,22 @@
                 </div>
               </div>
             </div>
-            <div class="info_wrap finish_wrap">
+            <div class="info_wrap finish_wrap" v-for="item of gameList" :key="item.id">
               <ul>
-                <li>发起账号：<span>1723876234</span></li>
-                <li>悬赏版通金额：<span>230.00</span></li>
-                <li>发起鉴宝：<span>2019.04.11. 21:12:11</span></li>
-                <li>鉴宝期限：<span>7天</span></li>
-                <li>本轮已参与人数：<span>8人</span></li>
+                <li>发起账号：<span>{{item.sponsor_phone}}</span></li>
+                <li>悬赏版通金额：<span>{{item.price}}</span></li>
+                <li>发起鉴宝：<span>{{item.start_time}}</span></li>
+                <li>鉴宝期限：<span>{{item.appraisal_count}}天</span></li>
+                <li>本轮已参与人数：<span>{{item.appraisal_count}}人</span></li>
               </ul>
-              <!--<div class="hide_p">
+              <div class="hide_p" v-if="!gameVisible">
                 <div class="img_wrap">
                   <img src="../../common/images/hide.png" alt="">
                 </div>
                 <p><a href="javascript:void(0)">点击支付</a> 10个版通</p>
                 <p>可查看本轮鉴宝留言</p>
-              </div>-->
-              <div class="finish_p">
+              </div>
+              <div class="finish_p" v-if="gameVisible">
                 <div class="img_wrap">
                   <img src="../../common/images/finish.png" alt="">
                 </div>
@@ -110,14 +111,14 @@
             </p>
             <p>注：鉴宝评论只供表达个人看法，并不代表本网站同意其看法或者证实其描述</p>
           </div>
-          <div class="underway" v-else-if="login&&assetInfo.appraisal_status!==0">
+          <div class="underway" v-if="!commentVisible">
             <div class="hide_p">
-                <div class="img_wrap">
-                  <img src="../../common/images/hide.png" alt="">
-                </div>
-                <p><a href="javascript:void(0)">点击支付</a> 10个版通</p>
-                <p>可查看本轮鉴宝留言</p>
+              <div class="img_wrap">
+                <img src="../../common/images/hide.png" alt="">
               </div>
+              <p><a href="javascript:void(0)">点击支付</a> 10个版通</p>
+              <p>可查看本轮鉴宝留言</p>
+            </div>
             <!--<ul>
               <li class="name"><span>名称：</span><span>{{assetInfo.name}}</span></li>
               <li class="price_year"><span>悬赏版通金额：</span><span>{{assetInfo.price}}</span>&lt;!&ndash;<span>年代：</span><span>{{assetInfo.age}}</span>&ndash;&gt;</li>
@@ -126,7 +127,7 @@
             </ul>-->
           </div>
         </div>
-        <div class="list" v-for="(item,index) of messageList" :key="index">
+        <div class="list" v-for="(item,index) of messageList" :key="index" v-if="commentVisible">
           <div class="line10" v-if="messageList>1"></div>
           <div class="list_content">
             <ul>
@@ -263,12 +264,14 @@
 
 <script>
   import myProgressBar from "../progressBar/progressBar"
+  import myCountDown from './countDown'
   
   export default {
     name: "detailsPage",
-    components: {myProgressBar},
+    components: {myProgressBar, myCountDown},
     data() {
       return {
+        a:"123",
         swiperOption: {
           pagination: {
             el: '.swiper-pagination'
@@ -283,7 +286,7 @@
         },
         contactDialogVisible: false,
         launchDialogVisible: false,
-        payDialogVisible: true,
+        payDialogVisible: false,
         authenticateDialogVisible: false,
         dayIndex: 1,
         resultIndex: 0,
@@ -303,22 +306,28 @@
         },
         login: true,
         page: 1,
-        limit: 5,
+        limit: 10,
         total: 1,
+        gameVisible: false,
+        serverTime: "",
+        gameList: [],
+        underway:{},
+        commentVisible: false,
         messageList: [
-          {   "id":"5be4eef10aff7e0001a3f83a", // 主键id
-            "sponsor_user_id":"xxxx",// 发起人人userID
-            "appraiser_user_id":"xxxx",// 鉴定人userID
-            "asset_id":"xxx", // 资产id
-            "appraiser_phone":"133****6836", // 鉴定人手机号
-            "auth_status":"未认证", // 认证状态
-            "datetime":"2019-2-30 14:14:32", // 鉴定时间
-            "appraisal_count":34, // 累计鉴定次数
-            "sponsor_phone":"133****6836",// 鉴定发起人
-            "comments":"Lorem ipsum dolor sit amet", // 评论
-            "result":1  //1-真  2-假
-    }
-    ],
+          {
+            "id": "5be4eef10aff7e0001a3f83a", // 主键id
+            "sponsor_user_id": "xxxx",// 发起人人userID
+            "appraiser_user_id": "xxxx",// 鉴定人userID
+            "asset_id": "xxx", // 资产id
+            "appraiser_phone": "133****6836", // 鉴定人手机号
+            "auth_status": "未认证", // 认证状态
+            "datetime": "2019-2-30 14:14:32", // 鉴定时间
+            "appraisal_count": 34, // 累计鉴定次数
+            "sponsor_phone": "133****6836",// 鉴定发起人
+            "comments": "Lorem ipsum dolor sit amet", // 评论
+            "result": 1  //1-真  2-假
+          }
+        ],
         codeValue: true,
         second: 60,
         sponsorUserId: '',
@@ -346,6 +355,7 @@
         this.phone = '+' + theRequest.phone.substr(1);
         this.token = theRequest.token;
         this.getAssetDetails();
+        this.getGameList();
         this.getCommentList();
       } else {
         this.callTips("请先登录再试")
@@ -443,10 +453,11 @@
       //下拉刷新
       refresh(done) {
         setTimeout(() => {
+          this.getGameList();
           this.page = 1;
           this.$axios({
             method: 'GET',
-            url: `${this.$baseURL}/v1/appraisal/evaluation/${this.assetId}?page=${this.page}&limit=${this.limit}`,
+            url: `${this.$baseURL}/v1/appraisal/evaluation/${this.assetId}?userid=${this.userId}&page=${this.page}&limit=${this.limit}`,
             headers: {
               'X-Access-Token': `${this.token}`
             }
@@ -471,7 +482,7 @@
           this.page++;
           this.$axios({
             method: 'GET',
-            url: `${this.$baseURL}/v1/appraisal/evaluation/${this.assetId}?page=${this.page}&limit=${this.limit}`,
+            url: `${this.$baseURL}/v1/appraisal/evaluation/${this.assetId}?userid=${this.userId}&page=${this.page}&limit=${this.limit}`,
             headers: {
               'X-Access-Token': `${this.token}`
             }
@@ -498,7 +509,7 @@
       getAssetDetails() {
         this.$axios({
           method: 'GET',
-          url: `${this.$baseURL}/v1/appraisal/products/${this.assetId}`,
+          url: `${this.$baseURL}/v1/appraisal/products/${this.assetId}?user_id=${this.userId}`,
           headers: {
             'X-Access-Token': `${this.token}`
           }
@@ -511,22 +522,61 @@
           console.log(error)
         })
       },
-      //获取鉴宝评论列表
-      getCommentList() {
+      //获取鉴宝游戏列表
+      getGameList() {
         this.$axios({
           method: 'GET',
-          url: `${this.$baseURL}/v1/appraisal/evaluation/${this.assetId}?page=${this.page}&limit=${this.limit}`,
+          url: `${this.$baseURL}/v1/appraisal/assets/${this.assetId}/activites?userid=${this.userId}&page=1&limit=10000`,
           headers: {
             'X-Access-Token': `${this.token}`
           }
         }).then(res => {
+          this.gameVisible = res.data.data.visible;
+          this.serverTime = res.data.data.server_time;
+          if(res.data.data.activites[0]&&res.data.data.activites[0].status===1){
+            this.underway=res.data.data.activites[0];
+            res.data.data.activites.slice(1).forEach((item) => {
+              item.start_time = this.$utils.formatDate(new Date(Number(item.start_time)), "yyyy-MM-dd hh:mm:ss");
+            });
+            this.gameList=res.data.data.activites.slice(1)
+          }
+          
+        }).catch(error => {
+          console.log(error)
+        })
+      },
+      //获取鉴宝评论列表
+      getCommentList() {
+        this.$axios({
+          method: 'GET',
+          url: `${this.$baseURL}/v1/appraisal/evaluation/${this.assetId}?userid=${this.userId}&page=${this.page}&limit=${this.limit}`,
+          headers: {
+            'X-Access-Token': `${this.token}`
+          }
+        }).then(res => {
+          this.commentVisible=res.data.data.visible;
+          console.log(this.$refs.my_scroller.noDataText);
+          this.a="456"
           this.total = res.data.data.valuation_count;
           this.sponsorUserId = res.data.data.sponsor_user_id_latest;
           this.transId = res.data.data.trans_id;
           res.data.data.valuation_info.forEach((item) => {
             item.datetime = this.$utils.formatDate(new Date(item.datetime), "yyyy-MM-dd hh:mm:ss");
           });
-          this.messageList = res.data.data.valuation_info;
+          this.messageList = [
+            {   "id":"5be4eef10aff7e0001a3f83a", // 主键id
+              "sponsor_user_id":"xxxx",// 发起人人userID
+              "appraiser_user_id":"xxxx",// 鉴定人userID
+              "asset_id":"xxx", // 资产id
+              "appraiser_phone":"133****6836", // 鉴定人手机号
+              "auth_status":"未认证", // 认证状态
+              "datetime":"2019-2-30 14:14:32", // 鉴定时间
+              "appraisal_count":34, // 累计鉴定次数
+              "sponsor_phone":"133****6836",// 鉴定发起人
+              "comments":"Lorem ipsum dolor sit amet", // 评论
+              "result":1  //1-真  2-假
+        }
+        ]//res.data.data.valuation_info;
           
         }).catch(error => {
           console.log(error)
@@ -547,6 +597,12 @@
         window.setTimeout(() => {
           this.tips = false;
         }, 2000);
+      },
+      //活动开始回调
+      startCallback(x) {
+      },
+      //活动结束回调
+      endCallback(x) {
       },
     },
   }
@@ -873,6 +929,7 @@
                 font-size: 22px; /*px*/
                 color: #333333;
                 line-height 52px
+                
                 a {
                   font-size: 28px; /*px*/
                   color: #871a11;
@@ -885,33 +942,37 @@
                 line-height 52px
               }
             }
-            .finish_p{
+            
+            .finish_p {
               position absolute
               top 32px
               right 37px
-  
+              
               .img_wrap {
                 width 127px
                 height 78px
-    
+                
                 img {
                   width 100%
                   height 100%
                 }
               }
-              .result_img{
+              
+              .result_img {
                 width 60px
                 height 61px
                 margin 0 auto
                 margin-top 25px
-                img{
+                
+                img {
                   width 100%
                   height 100%
                 }
               }
-              .result_text{
+              
+              .result_text {
                 text-align center
-                font-size: 28px;/*px*/
+                font-size: 28px; /*px*/
                 color: #333333;
                 line-height 56px
               }
@@ -980,36 +1041,39 @@
           url("../../common/images/right.png") no-repeat right bottom
           padding 30px
           background-color #f6f6f6
+          
           .hide_p {
             text-align center
-    
+            
             .img_wrap {
               width 131px
               height 123px
               margin 0 auto
-      
+              
               img {
                 width 100%
                 height 100%
               }
             }
-    
+            
             p:nth-child(2) {
               font-size: 34px; /*px*/
               color: #333333;
               line-height 52px
+              
               a {
                 font-size: 34px; /*px*/
                 color: #871a11;
               }
             }
-    
+            
             p:last-child {
               font-size: 22px; /*px*/
               color: #333333;
               line-height 52px
             }
           }
+          
           li {
             font-size 0
             margin-top 24px
@@ -1156,7 +1220,7 @@
           }
         }
       }
-
+      
     }
     
     .footer_wrap {
@@ -1500,16 +1564,16 @@
   .dialog_pay {
     .el-dialog {
       margin-top 28vh !important
-    
+      
       .el-dialog__header {
         display none
       }
-    
+      
       .el-dialog__body {
         padding 0
         padding-top 15px
         font-size 0
-      
+        
         h4 {
           width 466px
           height 61px
@@ -1522,39 +1586,42 @@
           background-repeat: no-repeat;
           background-size: 100% 100%;
           -moz-background-size: 100% 100%;
-        
+          
         }
         
-        .price{
-          font-size: 40px;/*px*/
+        .price {
+          font-size: 40px; /*px*/
           color: #a40000;
           text-align center
-          span{
-            font-size: 70px;/*px*/
+          
+          span {
+            font-size: 70px; /*px*/
           }
         }
+        
         .currency {
-          font-size: 24px;/*px*/
+          font-size: 24px; /*px*/
           color: #333333;
           margin-top 26px
           text-align center
         }
-  
+        
         .send {
           margin-top 32px
           font-size 0
           text-align center
-        
+          
           span:first-child {
             display inline-block
             font-size 22px; /*px*/
             color: #999999;
-            i{
-              font-style:normal
+            
+            i {
+              font-style: normal
               color: #333333;
             }
           }
-        
+          
           span:last-child {
             display inline-block
             font-size 22px; /*px*/
@@ -1565,13 +1632,13 @@
             padding-left 5px
             margin-left 12px
             border-radius: 20px;
-            border: solid 1px #e5e5e5;/*px*/
+            border: solid 1px #e5e5e5; /*px*/
           }
         }
         
         .code {
           text-align center
-        
+          
           input {
             padding-left 25px
             width 490px
@@ -1583,10 +1650,10 @@
             border: solid 1px #bfbfbf;
           }
         }
-      
+        
         .btn {
           box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
-        
+          
           span {
             width 570px
             height 80px
@@ -1601,7 +1668,7 @@
       }
     }
   }
-
+  
   .dialog_authenticate {
     .el-dialog {
       margin-top 28vh !important
