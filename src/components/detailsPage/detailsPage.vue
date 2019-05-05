@@ -3,7 +3,6 @@
     <scroller class="scroller"
               :on-refresh="refresh"
               :on-infinite="infinite"
-              :noDataText="a"
               ref="my_scroller">
       <div class="list_wrap">
         <div class="swiper_wrap">
@@ -32,7 +31,7 @@
             <div class="img_false"><img src="@/common/images/false1.png" alt="假"></div>
           </div>
           <div class="click_pay" v-else>
-            <span>点击支付</span>10个版通可查看累计鉴宝结果
+            <span @click="payDialog(1)">点击支付</span>10个版通可查看累计鉴宝结果
           </div>
         </div>
         <div class="line20"></div>
@@ -53,19 +52,34 @@
         <div class="line20"></div>
         <div class="game_wrap">
           <h4 class="game"><span></span>鉴宝游戏</h4>
-          <!--<div class="no_launch">
+          <div class="no_launch" v-if="gameList.length===0">
             <div class="img_wrap">
               <img src="../../common/images/zanwu.png" alt="">
             </div>
             <p>暂未有用户发起鉴宝</p>
-          </div>-->
-          <div class="game_launch">
+          </div>
+          <div class="game_launch" v-if="gameList.length>0">
             <p class="rule"><span><img src="../../common/images/guize.png" alt=""></span><span>规则：本轮鉴宝结束后，超过50%的一方平分版通；</span></p>
             <div class="info_wrap underway_wrap" v-if="underway.status===1">
               <ul>
                 <li>发起账号：<span>{{underway.sponsor_phone}}</span></li>
                 <li>悬赏版通金额：<span>{{underway.price}}</span></li>
-                <li>本轮倒计时：<span style="color: #871a11">5天22小时21分23秒</span></li>
+                <li>本轮倒计时：
+                  <my-count-down class="countDown" v-on:startCallback="startCallback()"
+                                 v-on:endCallback="endCallback()"
+                                 :currentTime="Number(serverTime)"
+                                 :startTime="Number(underway.start_time)"
+                                 :endTime="Number(underway.end_time)"
+                                 :tipText="'活动开始倒计时'"
+                                 :tipTextEnd="''"
+                                 :endText="'活动已结束'"
+                                 :dayTxt="'天'"
+                                 :hourTxt="'小时'"
+                                 :minutesTxt="'分钟'"
+                                 :secondsTxt="'秒'">
+                  
+                  </my-count-down>
+                </li>
                 <li>本轮已参与人数：<span>{{underway.appraisal_count}}人</span></li>
               </ul>
               <div class="underway_p">
@@ -86,7 +100,7 @@
                 <div class="img_wrap">
                   <img src="../../common/images/hide.png" alt="">
                 </div>
-                <p><a href="javascript:void(0)">点击支付</a> 10个版通</p>
+                <p><a href="javascript:void(0)" @click="payDialog(2)">点击支付</a> 10个版通</p>
                 <p>可查看本轮鉴宝留言</p>
               </div>
               <div class="finish_p" v-if="gameVisible">
@@ -116,7 +130,7 @@
               <div class="img_wrap">
                 <img src="../../common/images/hide.png" alt="">
               </div>
-              <p><a href="javascript:void(0)">点击支付</a> 10个版通</p>
+              <p><a href="javascript:void(0)" @click="payDialog(3)">点击支付</a> 10个版通</p>
               <p>可查看本轮鉴宝留言</p>
             </div>
             <!--<ul>
@@ -210,7 +224,7 @@
           width="76%"
           center>
         <h4>支付</h4>
-        <div class="price">¥<span>10077</span></div>
+        <div class="price">¥<span>10</span></div>
         <div class="currency">板通</div>
         <div class="send">
           <span v-cloak>请输入尾号 <i>{{this.phone.substr(-4)}}</i> 短信验证码</span>
@@ -222,7 +236,7 @@
           <input type="text" v-model="code" placeholder="请输入短信验证码">
         </div>
         <div class="btn">
-          <span @click="launchTreasureAppraisal">确定</span>
+          <span @click="pay">确定</span>
         </div>
       </el-dialog>
     </div>
@@ -269,9 +283,9 @@
   export default {
     name: "detailsPage",
     components: {myProgressBar, myCountDown},
+    inject: ['reload'],
     data() {
       return {
-        a:"123",
         swiperOption: {
           pagination: {
             el: '.swiper-pagination'
@@ -311,23 +325,9 @@
         gameVisible: false,
         serverTime: "",
         gameList: [],
-        underway:{},
+        underway: {},
         commentVisible: false,
-        messageList: [
-          {
-            "id": "5be4eef10aff7e0001a3f83a", // 主键id
-            "sponsor_user_id": "xxxx",// 发起人人userID
-            "appraiser_user_id": "xxxx",// 鉴定人userID
-            "asset_id": "xxx", // 资产id
-            "appraiser_phone": "133****6836", // 鉴定人手机号
-            "auth_status": "未认证", // 认证状态
-            "datetime": "2019-2-30 14:14:32", // 鉴定时间
-            "appraisal_count": 34, // 累计鉴定次数
-            "sponsor_phone": "133****6836",// 鉴定发起人
-            "comments": "Lorem ipsum dolor sit amet", // 评论
-            "result": 1  //1-真  2-假
-          }
-        ],
+        messageList: [],
         codeValue: true,
         second: 60,
         sponsorUserId: '',
@@ -335,6 +335,7 @@
         tips: false,
         transId: "",
         sellerPhone: "12345678901",
+        zone: "",
       }
     },
     created() {
@@ -533,12 +534,12 @@
         }).then(res => {
           this.gameVisible = res.data.data.visible;
           this.serverTime = res.data.data.server_time;
-          if(res.data.data.activites[0]&&res.data.data.activites[0].status===1){
-            this.underway=res.data.data.activites[0];
+          if (res.data.data.activites[0] && res.data.data.activites[0].status === 1) {
+            this.underway = res.data.data.activites[0];
             res.data.data.activites.slice(1).forEach((item) => {
               item.start_time = this.$utils.formatDate(new Date(Number(item.start_time)), "yyyy-MM-dd hh:mm:ss");
             });
-            this.gameList=res.data.data.activites.slice(1)
+            this.gameList = res.data.data.activites.slice(1)
           }
           
         }).catch(error => {
@@ -554,29 +555,14 @@
             'X-Access-Token': `${this.token}`
           }
         }).then(res => {
-          this.commentVisible=res.data.data.visible;
-          console.log(this.$refs.my_scroller.noDataText);
-          this.a="456"
+          this.commentVisible = res.data.data.visible;
           this.total = res.data.data.valuation_count;
           this.sponsorUserId = res.data.data.sponsor_user_id_latest;
           this.transId = res.data.data.trans_id;
           res.data.data.valuation_info.forEach((item) => {
             item.datetime = this.$utils.formatDate(new Date(item.datetime), "yyyy-MM-dd hh:mm:ss");
           });
-          this.messageList = [
-            {   "id":"5be4eef10aff7e0001a3f83a", // 主键id
-              "sponsor_user_id":"xxxx",// 发起人人userID
-              "appraiser_user_id":"xxxx",// 鉴定人userID
-              "asset_id":"xxx", // 资产id
-              "appraiser_phone":"133****6836", // 鉴定人手机号
-              "auth_status":"未认证", // 认证状态
-              "datetime":"2019-2-30 14:14:32", // 鉴定时间
-              "appraisal_count":34, // 累计鉴定次数
-              "sponsor_phone":"133****6836",// 鉴定发起人
-              "comments":"Lorem ipsum dolor sit amet", // 评论
-              "result":1  //1-真  2-假
-        }
-        ]//res.data.data.valuation_info;
+          this.messageList = res.data.data.valuation_info;
           
         }).catch(error => {
           console.log(error)
@@ -603,7 +589,38 @@
       },
       //活动结束回调
       endCallback(x) {
+        this.reload();
       },
+      //支付弹窗
+      payDialog(zone) {
+        this.zone = zone;
+        this.payDialogVisible = true;
+      },
+      //支付
+      pay() {
+        let data = {};
+        data.user_id = this.userId;
+        data.asset_id = this.assetId;
+        data.zone = this.zone;
+        data.code = this.code;
+        this.$axios({
+          method: 'POST',
+          url: `${this.$baseURL}/v1/appraisal/auth-payment`,
+          data: this.$querystring.stringify(data),
+          headers: {
+            'X-Access-Token': `${this.token}`
+          }
+        }).then((res) => {
+          this.code = "";
+          this.payDialogVisible = false;
+          this.callTips("支付成功");
+          this.reload();
+        }).catch(error => {
+          this.code = "";
+          this.callTips(error.response.data.message);
+          console.log(error)
+        })
+      }
     },
   }
 </script>
@@ -984,6 +1001,10 @@
           }
           
           .underway_wrap {
+            .countDown {
+              display inline-block
+              color #871a11
+            }
           }
           
           .finish_wrap {

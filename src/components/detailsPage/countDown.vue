@@ -2,7 +2,7 @@
   <div class="countDown">
     <p v-if="msTime.show">
       <span v-if="tipShow">{{tipText}}:</span>
-      <span v-if="!tipShow">{{tipTextEnd}}:</span>
+      <span v-if="!tipShow">{{tipTextEnd}}</span>
       <span v-if="msTime.day>0"><span>{{msTime.day}}</span><i>{{dayTxt}}</i></span>
       <span>{{msTime.hour}}</span><i>{{hourTxt}}</i>
       <span>{{msTime.minutes}}</span><i>{{minutesTxt}}</i>
@@ -197,3 +197,7 @@
     }
   }
 </script>
+<style scoped lang="stylus">
+  .countDown{
+  }
+</style>
