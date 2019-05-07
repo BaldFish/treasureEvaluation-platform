@@ -52,13 +52,13 @@
         <div class="line20"></div>
         <div class="game_wrap">
           <h4 class="game"><span></span>鉴宝游戏</h4>
-          <div class="no_launch" v-if="!gameVisible">
+          <div class="no_launch" v-if="!gameCount">
             <div class="img_wrap">
               <img src="../../common/images/zanwu.png" alt="">
             </div>
             <p>暂未有用户发起鉴宝</p>
           </div>
-          <div class="game_launch" v-if="gameVisible">
+          <div class="game_launch" v-if="gameCount">
             <p class="rule"><span><img src="../../common/images/guize.png" alt=""></span><span>规则：本轮鉴宝结束后，超过50%的一方平分版通；</span></p>
             <div class="info_wrap underway_wrap" v-if="underway.status===1">
               <ul>
@@ -322,7 +322,8 @@
         page: 1,
         limit: 10,
         total: 1,
-        gameVisible: 0,
+        gameCount:0,
+        gameVisible: false,
         serverTime: "",
         underway: {},
         finishList:[],
@@ -532,6 +533,7 @@
             'X-Access-Token': `${this.token}`
           }
         }).then(res => {
+          this.gameCount = res.data.data.count;
           this.gameVisible = res.data.data.visible;
           this.serverTime = res.data.data.server_time;
           if (res.data.data.activites[0] && res.data.data.activites[0].status === 1) {
