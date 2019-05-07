@@ -52,13 +52,13 @@
         <div class="line20"></div>
         <div class="game_wrap">
           <h4 class="game"><span></span>鉴宝游戏</h4>
-          <div class="no_launch" v-if="gameList.length===0">
+          <div class="no_launch" v-if="!gameVisible">
             <div class="img_wrap">
               <img src="../../common/images/zanwu.png" alt="">
             </div>
             <p>暂未有用户发起鉴宝</p>
           </div>
-          <div class="game_launch" v-if="gameList.length>0">
+          <div class="game_launch" v-if="gameVisible">
             <p class="rule"><span><img src="../../common/images/guize.png" alt=""></span><span>规则：本轮鉴宝结束后，超过50%的一方平分版通；</span></p>
             <div class="info_wrap underway_wrap" v-if="underway.status===1">
               <ul>
@@ -88,7 +88,7 @@
                 </div>
               </div>
             </div>
-            <div class="info_wrap finish_wrap" v-for="item of gameList" :key="item.id">
+            <div class="info_wrap finish_wrap" v-for="item of finishList" :key="item.id">
               <ul>
                 <li>发起账号：<span>{{item.sponsor_phone}}</span></li>
                 <li>悬赏版通金额：<span>{{item.price}}</span></li>
@@ -322,10 +322,10 @@
         page: 1,
         limit: 10,
         total: 1,
-        gameVisible: false,
+        gameVisible: 0,
         serverTime: "",
-        gameList: [],
         underway: {},
+        finishList:[],
         commentVisible: false,
         messageList: [],
         codeValue: true,
@@ -539,7 +539,12 @@
             res.data.data.activites.slice(1).forEach((item) => {
               item.start_time = this.$utils.formatDate(new Date(Number(item.start_time)), "yyyy-MM-dd hh:mm:ss");
             });
-            this.gameList = res.data.data.activites.slice(1)
+            this.finishList = res.data.data.activites.slice(1)
+          }else{
+            res.data.data.activites.forEach((item) => {
+              item.start_time = this.$utils.formatDate(new Date(Number(item.start_time)), "yyyy-MM-dd hh:mm:ss");
+            });
+            this.finishList = res.data.data.activites
           }
           
         }).catch(error => {
@@ -1354,7 +1359,6 @@
       
       .el-dialog__body {
         padding 0
-        height 334px
         padding-top 15px
         font-size 0
         
@@ -1385,7 +1389,7 @@
           box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
           
           span {
-            width 285px
+            width 50%
             height 80px
             line-height 80px
             text-align center
@@ -1568,7 +1572,7 @@
           box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
           
           span {
-            width 570px
+            width 100%
             height 80px
             line-height 80px
             text-align center
@@ -1674,9 +1678,8 @@
         
         .btn {
           box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
-          
           span {
-            width 570px
+            width 100%
             height 80px
             line-height 80px
             text-align center
@@ -1803,7 +1806,7 @@
           box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
           
           span {
-            width 570px
+            width 100%
             height 80px
             line-height 80px
             text-align center
