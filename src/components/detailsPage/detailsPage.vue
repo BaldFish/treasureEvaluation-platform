@@ -108,7 +108,7 @@
                   <img src="../../common/images/finish.png" alt="">
                 </div>
                 <div class="result_img" v-if="item.result>=50">
-                  <img src="../../common/images/true.png" alt="">
+                  <img src="../../common/images/true3.png" alt="">
                 </div>
                 <p class="result_text" v-if="item.result>=50">{{item.result}}%</p>
                 <div class="result_img" v-if="item.result<50">
