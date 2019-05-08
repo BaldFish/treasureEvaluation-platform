@@ -107,10 +107,14 @@
                 <div class="img_wrap">
                   <img src="../../common/images/finish.png" alt="">
                 </div>
-                <div class="result_img">
+                <div class="result_img" v-if="item.result>=50">
+                  <img src="../../common/images/true.png" alt="">
+                </div>
+                <p class="result_text" v-if="item.result>=50">{{item.result}}%</p>
+                <div class="result_img" v-if="item.result<50">
                   <img src="../../common/images/false3.png" alt="">
                 </div>
-                <p class="result_text">80%</p>
+                <p class="result_text" v-if="item.result<50">{{100-item.result}}%</p>
               </div>
             </div>
           </div>
@@ -322,11 +326,11 @@
         page: 1,
         limit: 10,
         total: 1,
-        gameCount:0,
+        gameCount: 0,
         gameVisible: false,
         serverTime: "",
         underway: {},
-        finishList:[],
+        finishList: [],
         commentVisible: false,
         messageList: [],
         codeValue: true,
@@ -542,7 +546,7 @@
               item.start_time = this.$utils.formatDate(new Date(Number(item.start_time)), "yyyy-MM-dd hh:mm:ss");
             });
             this.finishList = res.data.data.activites.slice(1)
-          }else{
+          } else {
             res.data.data.activites.forEach((item) => {
               item.start_time = this.$utils.formatDate(new Date(Number(item.start_time)), "yyyy-MM-dd hh:mm:ss");
             });
@@ -1680,6 +1684,7 @@
         
         .btn {
           box-shadow: -4px -24px 46px 8px rgba(0, 0, 0, 0.09);
+          
           span {
             width 100%
             height 80px
