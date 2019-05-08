@@ -228,7 +228,7 @@
           width="76%"
           center>
         <h4>支付</h4>
-        <div class="price">¥<span>10</span></div>
+        <div class="price"><span>10</span></div>
         <div class="currency">板通</div>
         <div class="send">
           <span v-cloak>请输入尾号 <i>{{this.phone.substr(-4)}}</i> 短信验证码</span>
