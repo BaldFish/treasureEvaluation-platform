@@ -93,7 +93,7 @@
                 <li>发起账号：<span>{{item.sponsor_phone}}</span></li>
                 <li>悬赏版通金额：<span>{{item.price}}</span></li>
                 <li>发起鉴宝：<span>{{item.start_time}}</span></li>
-                <li>鉴宝期限：<span>{{item.appraisal_count}}天</span></li>
+                <li>鉴宝期限：<span>{{item.duration}}天</span></li>
                 <li>本轮已参与人数：<span>{{item.appraisal_count}}人</span></li>
               </ul>
               <div class="hide_p" v-if="!gameVisible">
