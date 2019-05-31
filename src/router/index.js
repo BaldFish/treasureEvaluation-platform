@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import myHome from '@/components/home/home'
 import myLogin from '@/components/login/login'
 import myDetailsPage from '@/components/detailsPage/detailsPage'
+import myTreasureQrCode from '@/components/treasureQrCode/treasureQrCode'
 Vue.use(Router);
 
 export default new Router({
@@ -26,6 +27,11 @@ export default new Router({
       path:'/detailsPage',
       name:'detailsPage',
       component:myDetailsPage
+    },
+    {
+      path:'/treasureQrCode',
+      name:'treasureQrCode',
+      component:myTreasureQrCode
     },
   ]
 })

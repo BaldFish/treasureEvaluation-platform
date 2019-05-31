@@ -16,6 +16,7 @@
     "bignumber.js": "^7.2.1",
     "echarts": "^4.2.0-rc.2",
     "element-ui": "^2.4.6",
+    "js-md5": "^0.7.3",
     "lib-flexible": "^0.3.2",
     "lodash": "^4.17.10",
     "vee-validate": "^2.0.0-rc.25",
