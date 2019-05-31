@@ -147,13 +147,13 @@
       //保存人员关系
       saveRelationship(){
         let formData = {
-          superior:{"mobile":"17510001001","name":"上级"},
+          superior:{"mobile":this.getQuery("phone"),"name":"上级"},
           subordinate:{"mobile":this.rueform.phone,"name":"下级"}
         };
-        let appId = "23001"
-        let developkey  = "5ad47d9bcfd64bb1b572d4070c962ee8"
-        let timestamp = (new Date()).getTime()
-        let sign = md5("/sales/saveSalesRelationship"+ appId + developkey + timestamp)
+        let appId = "23001";
+        let developkey  = "5ad47d9bcfd64bb1b572d4070c962ee8";
+        let timestamp = (new Date()).getTime();
+        let sign = md5("/sales/saveSalesRelationship"+ appId + developkey + timestamp);
         this.$axios({
           method: 'POST',
           url: `http://119.23.14.40:9200/sales/saveSalesRelationship?appId=${appId}&timestamp=${timestamp}&sign=${sign}`,
