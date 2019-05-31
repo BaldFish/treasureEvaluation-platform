@@ -42,6 +42,8 @@
         display block
         margin 0 auto
         padding-top 90px
+        width 240px
+        height 300px
       p
         margin 64px
         line-height normal
@@ -50,6 +52,8 @@
         display block
         margin 0 auto
         margin-top 90px
+        width 240px
+        height 240px
       p
         margin-top 40px
         line-height normal
