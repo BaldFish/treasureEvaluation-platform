@@ -133,6 +133,7 @@
           device_id: this.deviceId(), //设备ID
           platform: 1,//1-web,2-安卓,3-iOS,4-大数据 5-公众号
           type: 1,// 1-手机验证码登录 2-微信登录
+          invite_code: this.getQuery("inviteCode"),// 邀请注册码
         };
         this.$axios({
           method: 'POST',
@@ -140,7 +141,7 @@
           data: this.$querystring.stringify(loginFormData)
         }).then(res => {
           sessionStorage.setItem("myLogin", JSON.stringify(res.data.data));
-          this.saveRelationship()
+          this.$router.push("/treasureQrCode")
         }).catch(error => {
         })
       },
