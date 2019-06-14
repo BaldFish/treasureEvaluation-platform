@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="login" v-loading="loading">
     <div class="container">
       <div class="content">
         <h4>登录/注册</h4>
@@ -70,6 +70,7 @@
         },
         intervalCode: null,
         getCheckTime: 0, // 验证码时间
+        loading: false
       }
     },
     created () {
@@ -127,23 +128,31 @@
       },
       //登录
       login(){
-        let loginFormData = {
-          phone: "+86" + this.rueform.phone,//手机号
-          code: this.rueform.verify,//短信验证码
-          device_id: this.deviceId(), //设备ID
-          platform: 1,//1-web,2-安卓,3-iOS,4-大数据 5-公众号
-          type: 1,// 1-手机验证码登录 2-微信登录
-          invite_code: this.getQuery("inviteCode"),// 邀请注册码
-        };
-        this.$axios({
-          method: 'POST',
-          url: `${this.$baseURL}/v1/appraisal/sessions/phone`,
-          data: this.$querystring.stringify(loginFormData)
-        }).then(res => {
-          sessionStorage.setItem("myLogin", JSON.stringify(res.data.data));
-          this.$router.push("/treasureQrCode")
-        }).catch(error => {
-        })
+        let reg_phone = /^1[3-9]\d{9}$/;
+        let reg_verify = /^\d{4}$/;
+        if (reg_phone.test(this.rueform.phone) && reg_verify.test(this.rueform.verify)){
+          //打开Loading
+          this.loading = true;
+          let loginFormData = {
+            phone: "+86" + this.rueform.phone,//手机号
+            code: this.rueform.verify,//短信验证码
+            device_id: this.deviceId(), //设备ID
+            platform: 1,//1-web,2-安卓,3-iOS,4-大数据 5-公众号
+            type: 1,// 1-手机验证码登录 2-微信登录
+            invite_code: this.getQuery("inviteCode"),// 邀请注册码
+          };
+          this.$axios({
+            method: 'POST',
+            url: `${this.$baseURL}/v1/appraisal/sessions/phone`,
+            data: this.$querystring.stringify(loginFormData)
+          }).then(res => {
+            //关闭Loading
+            this.loading = true;
+            sessionStorage.setItem("myLogin", JSON.stringify(res.data.data));
+            this.$router.push("/treasureQrCode")
+          }).catch(error => {
+          })
+        }
       },
       //保存人员关系
       saveRelationship(){
@@ -174,6 +183,14 @@
 
 <style lang="stylus">
   .login
+    .el-loading-mask
+      background-color rgba(0, 0, 0, 0.7);
+      .el-loading-spinner .path{
+        stroke: #950101
+      }
+      .circular
+        width 100px
+        height 100px
     .container
       .content
         margin 75px 50px
