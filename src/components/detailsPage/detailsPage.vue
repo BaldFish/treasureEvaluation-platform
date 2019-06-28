@@ -209,10 +209,10 @@
           <span v-if="codeValue" @click="getPhoneCode">发送</span>
           <span v-else style="background-color: #7d7d7d;color: #ffffff;">倒计时（{{second}}）</span>
         </div>
-        <div class="currency clearfix">
-          <span>板通</span>
+        <!--<div class="currency clearfix">
+          <span>版通</span>
           <span class="fr"></span>
-        </div>
+        </div>-->
         <div class="code">
           <input type="text" v-model="code" placeholder="请输入短信验证码">
         </div>
@@ -229,7 +229,7 @@
           center>
         <h4>支付</h4>
         <div class="price"><span>10</span></div>
-        <div class="currency">板通</div>
+        <div class="currency">版通</div>
         <div class="send">
           <span v-cloak>请输入尾号 <i>{{this.phone.substr(-4)}}</i> 短信验证码</span>
           <span v-if="codeValue" @click="getPhoneCode">发送</span>
